@@ -1,0 +1,75 @@
+/* General Body Styling */
+body {
+    font-family: 'Georgia', serif;
+    background-color: #ffffff;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #4e1c1c;
+}
+
+.navbar-brand,
+.nav-link,
+.btn {
+    color: #fff !important;
+}
+
+/* Hero Section Styling */
+.hero-section {
+    background: url('https://via.placeholder.com/1200x600') no-repeat center center;
+    background-size: cover;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.hero-section .hero-content {
+    /*background: rgba(0, 0, 0, 0); Semi-transparent background for better text visibility */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.hero-section p {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+/* Categories Section */
+.category-box {
+    text-align: center;
+    background-color: #cae2a4;
+    border: 1px solid #c9de97;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.category-box h5 {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #6c5c45;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #4e1c1c;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+}
