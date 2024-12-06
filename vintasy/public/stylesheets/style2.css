@@ -1,0 +1,111 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #eeeeee;
+    padding: 20px;
+}
+.profile-container {
+    text-align:left;
+    margin-left: 140px;
+    display: flex;
+    justify-content: flex-start;
+}
+.profile-container img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    background-image: url('/images/default-image.jpg'); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.profile_username  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.store-heading  {
+    
+    margin-left: 80px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items:flex-start;
+}
+.store-heading h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bolder;
+    font-size: 3rem;
+}
+.back-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: rgb(255, 255, 255);
+    background-color: #000000;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+}
+.back-btn i{
+    color: rgb(255, 255, 255);
+
+    
+}
+.cart-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: rgb(255, 255, 255);
+    background-color: #000000;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.back-btn i {
+    font-size: 1rem;
+}
+.cart-btn i {
+    font-size: 1rem;
+    color: white;
+}
+.prod-price{
+    display: flex;
+    justify-content: space-around;
+}
+.product-card {
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+.product-card img {
+    object-fit: cover;
+    height: 150px;
+    width: 90px;
+    border-radius: 8px 8px 0 0;
+}
+.product-status {
+    font-size: 0.9rem;
+    color: #d2e2bb;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.in-stock {
+    background-color: #28a745;
+}
+.sold {
+    background-color: #dc3545;
+}
