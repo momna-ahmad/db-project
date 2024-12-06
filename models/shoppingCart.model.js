@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 let shoppingCartSchema = mongoose.Schema({
   count : int ,
-  product : [{
+  items : [{
     type : mongoose.Schema.Types.ObjectId ,
     ref : 'product'
   }]

@@ -11,10 +11,24 @@ let productSchema = mongoose.Schema({
     required : true 
   },
   price: int ,
-  //picture ?
-  date : date ,
-  isAvailable : boolean ,
-  description : string 
+  //picture: {
+  //  name : string ,
+  //  imgUrl : 
+  //},
+  seller : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  dateAdded : {
+    type : Date  ,
+    default : Date.now
+  },
+  isAvailable : {
+    type : boolean ,
+    default : true
+  } ,
+  description : string ,
+  
 });
 
 let ProductModel = mongoose.model("Product", productSchema);
