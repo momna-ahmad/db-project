@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require('multer') ;
 
 
 var expressLayouts = require("express-ejs-layouts");
@@ -14,6 +15,19 @@ server.use(express.static("public"));
 
 // add support for fetching data from request body
 server.use(express.urlencoded());
+
+// Set up storage for multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads'); // Directory to store files
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`); // Unique file name
+  },
+});
+
+const upload = multer({ storage: storage });
+
 
 
 
@@ -70,7 +84,8 @@ console.log("File data:", req.file);
 server.get('/addProfile', (req, res) => {
   res.render('addProfile');
 });
-app.post('/addProfile', async (req, res) => {
+
+server.post('/addProfile', async (req, res) => {
     try {
         const { image, storename, name, description } = req.body;
         await Profile.create({ image, storename, name, description });
