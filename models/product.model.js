@@ -11,10 +11,12 @@ let productSchema = mongoose.Schema({
     required : true 
   },
   price: int ,
-  //picture: {
-  //  name : string ,
-  //  imgUrl : 
-  //},
+
+  picture : [{
+    name : string ,
+    imgUrl : string
+  }],
+
   seller : {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'

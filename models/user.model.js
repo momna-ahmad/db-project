@@ -28,7 +28,15 @@ let userSchema = mongoose.Schema({
     cart : {
         type: mongoose.Schema.Types.ObjectId ,
         ref: 'shoppingCart' 
+    } ,
+
+    location : {
+      city: string ,
+      address: string,
+      country : string
     }
+
+    
   });
   
   let userModel = mongoose.model("user", productSchema);

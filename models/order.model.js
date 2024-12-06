@@ -27,6 +27,10 @@ let orderSchema = mongoose.Schema({
         default: Date.now,
       },
       location : {
+        country: {
+          type : string ,
+          requred: true
+        },
         city : {
             type : string ,
             required : true 
