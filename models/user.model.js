@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 
 let userSchema = mongoose.Schema({
     username: {
-        type : string ,
+        type : String ,
         required: true ,
         unique : true ,
         minlength : 3 ,
       } ,
-      name : string,
+      name : String,
       password: {
-        type : string,
+        type : String,
         required : true 
       },
       product: [{
@@ -17,7 +17,7 @@ let userSchema = mongoose.Schema({
         ref: 'product' 
       }] ,
       review : [{
-        comment: string ,
+        comment: String ,
         reviewer : {
             type: mongoose.Schema.Types.ObjectId ,
             ref: 'user'
@@ -31,14 +31,14 @@ let userSchema = mongoose.Schema({
     } ,
 
     location : {
-      city: string ,
-      address: string,
-      country : string
+      city: String ,
+      address: String,
+      country : String
     }
 
     
   });
   
-  let userModel = mongoose.model("user", productSchema);
+  let userModel = mongoose.model("user", userSchema);
   
   module.exports = userModel;

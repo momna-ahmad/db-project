@@ -28,15 +28,15 @@ let orderSchema = mongoose.Schema({
       },
       location : {
         country: {
-          type : string ,
+          type : String ,
           requred: true
         },
         city : {
-            type : string ,
+            type : String ,
             required : true 
         },
         address : {
-            type : string ,
+            type : String ,
             required : true 
         }
       }

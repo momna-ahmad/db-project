@@ -3,18 +3,18 @@ const mongoose = require("mongoose");
 
 let productSchema = mongoose.Schema({
   name: {
-    type : string ,
+    type : String ,
     required : true
   },
   category: {
-    type : string ,
+    type : String ,
     required : true 
   },
-  price: int ,
+  price: Number ,
 
   picture : [{
-    name : string ,
-    imgUrl : string
+    name : String ,
+    imgUrl : String
   }],
 
   seller : {
@@ -26,10 +26,10 @@ let productSchema = mongoose.Schema({
     default : Date.now
   },
   isAvailable : {
-    type : boolean ,
+    type : Boolean ,
     default : true
   } ,
-  description : string ,
+  description : String ,
   
 });
 

@@ -2,6 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require('multer') ;
 
+let Product = require("./models/product.model");
+let user = require("./models/user.model");
+let order = require("./models/order.model");
+let cart = require("./models/shoppingCart.model");
+
 
 var expressLayouts = require("express-ejs-layouts");
 let server = express();
@@ -44,14 +49,14 @@ mongoose
 //shafqaat
 // Homepage route
 server.get('/', (req, res) => {
-  res.render("homepage");
+  res.render("partials/landing")
 });
 
 // Read Profile
 server.get('/readProfile', async (req, res) => {
   try {
       // Fetch user profiles
-      let Profiles = await Profile.find();
+      let Profiles = await user.find();
       
       // Fetch products associated with the profile (assuming products have a `profileId` field)
       let products = await Product.find(); // Optionally filter products by profileId
@@ -68,10 +73,10 @@ server.post('/addProfile', upload.single('image'), async (req, res) => {
   try {
       const {  storename, name, description } = req.body;
       const image = req.file ? req.file.path : null; // Get file path
-      await Profile.create({ image, storename, name, description });
+      await user.create({ image, storename, name, description });
       res.redirect('/readProfile'); // Redirect to the profile listing page
       console.log("Form data:", req.body);
-console.log("File data:", req.file);
+      console.log("File data:", req.file);
 
   } catch (error) {
       console.error("Error creating profile:", error);
@@ -88,7 +93,7 @@ server.get('/addProfile', (req, res) => {
 server.post('/addProfile', async (req, res) => {
     try {
         const { image, storename, name, description } = req.body;
-        await Profile.create({ image, storename, name, description });
+        await user.create({ image, storename, name, description });
         res.redirect('/readProfile'); // Redirect to the profile listing page
     } catch (error) {
         console.error("Error creating profile:", error);
@@ -99,7 +104,7 @@ server.post('/addProfile', async (req, res) => {
 
 // Route to render the Add Product form
 server.get('/addProduct', async (req, res) => {
-  const profiles = await Profile.find(); // Ensure there is at least one profile before adding a product
+  const profiles = await user.find(); // Ensure there is at least one profile before adding a product
   if (profiles.length === 0) {
       return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
   }
@@ -109,7 +114,7 @@ server.get('/addProduct', async (req, res) => {
 
 // Edit Profile
 server.get('/editProfile/:id', async (req, res) => {
-  let profile = await Profile.findById(req.params.id);
+  let profile = await user.findById(req.params.id);
   res.render('editProfile', { profile });
 });
 
@@ -117,9 +122,9 @@ server.get('/editProfile/:id', async (req, res) => {
 server.post('/updateProfile/:id', upload.single('image'), async (req, res) => {
   const { storename, name, description } = req.body;
   const image = req.file ? req.file.path : null;
-  let updatedProfile = await Profile.findByIdAndUpdate(
+  let updatedProfile = await user.findByIdAndUpdate(
     req.params.id,
-    { image, storename, name, description },
+    { image, username, name, description },
     { new: true }
   );
   res.redirect('/readProfile');
@@ -146,12 +151,12 @@ app.post('/createProfile', upload.single('image'), async (req, res) => {
 
 server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
-      const { name, price, status } = req.body;
+      const { name, price, description } = req.body;
       const image = req.file ? req.file.path : null; // Save the file path
       const product = new Product({
           name,
           price,
-          status,
+          description,
           image,
       });
       await product.save();
