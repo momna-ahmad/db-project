@@ -86,15 +86,17 @@ server.post('/addProfile', upload.single('image'), async (req, res) => {
 
 
 // Route to render the Add Profile form
-server.get('/addProfile', (req, res) => {
-  res.render('addProfile');
+server.get('/sign-in', (req, res) => {
+  res.render('partials/sign-in' , {
+    layout : 'profileForm' 
+  });
 });
 
-server.post('/addProfile', async (req, res) => {
+server.post('/sign-in', async (req, res) => {
     try {
-        const { image, storename, name, description } = req.body;
-        await user.create({ image, storename, name, description });
-        res.redirect('/readProfile'); // Redirect to the profile listing page
+        const { username, password, name } = req.body;
+        await user.create({ username,password, name});
+        return res.render('partials/profile'); // Redirect to the profile listing page
     } catch (error) {
         console.error("Error creating profile:", error);
         res.status(500).send("An error occurred while creating the profile.");
