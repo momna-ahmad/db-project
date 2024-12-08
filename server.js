@@ -18,8 +18,10 @@ server.use(expressLayouts);
 server.use(express.static("public"));
 
 
+
 // add support for fetching data from request body
-server.use(express.urlencoded());
+server.use(express.urlencoded({extended : true} ));
+
 
 // Set up storage for multer
 const storage = multer.diskStorage({
@@ -56,6 +58,7 @@ server.get('/', (req, res) => {
 server.get('/readProfile', async (req, res) => {
   try {
       // Fetch user profiles
+      console.log(req.id) ;
       let Profiles = await user.find();
       
       // Fetch products associated with the profile (assuming products have a `profileId` field)
@@ -79,23 +82,28 @@ server.post('/addProfile', upload.single('image'), async (req, res) => {
       console.log("File data:", req.file);
 
   } catch (error) {
-      console.error("Error creating profile:", error);
-      res.status(500).send("An error occurred while creating the profile.");
+          console.error("Error creating profile:", error);
+    res.status(500).send("An error occurred while creating the profile.");
   }
 });
 
 
 // Route to render the Add Profile form
-server.get('/sign-in', (req, res) => {
-  res.render('partials/sign-in' , {
+server.get('/admin/sign-in', (req, res) => {
+  
+  res.render('./partials/sign-in.ejs' , {
     layout : 'profileForm' 
   });
 });
 
-server.post('/sign-in', async (req, res) => {
+server.post('/admin/sign-in', async (req, res) => {
+  
     try {
-        const { username, password, name } = req.body;
-        await user.create({ username,password, name});
+      let data = req.body ;
+      let newUser = new user(data) ;
+      await newUser.save() ;
+        //const { username, password, name } = req.body;
+        //await user.create({ username,password, name});
         return res.render('partials/profile'); // Redirect to the profile listing page
     } catch (error) {
         console.error("Error creating profile:", error);

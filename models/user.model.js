@@ -24,7 +24,7 @@ let userSchema = mongoose.Schema({
         }
       }],
      
-    //picture ?
+    
     cart : {
         type: mongoose.Schema.Types.ObjectId ,
         ref: 'shoppingCart' 
