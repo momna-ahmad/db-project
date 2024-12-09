@@ -39,7 +39,7 @@ const upload = multer({ storage: storage });
 
 
 
-let connectionString = "mongodb://localhost/vintasy";
+let connectionString = "mongodb+srv://kiranshehzadiroshni:p4yNLb4Y5NIi3rvZ@vintagethrift.x4ymp.mongodb.net/vintasy";
 mongoose
   .connect(connectionString)
   .then( async () =>
