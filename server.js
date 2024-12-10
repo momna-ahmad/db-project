@@ -126,13 +126,7 @@ server.post('/admin/sign-in', async (req, res) => {
 
 
 // Route to render the Add Product form
-server.get('/addProduct', async (req, res) => {
-  const profiles = await user.find(); // Ensure there is at least one profile before adding a product
-  if (profiles.length === 0) {
-      return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
-  }
-  res.render('addProduct');
-});
+
 
 
 // Edit Profile
@@ -171,6 +165,13 @@ app.post('/createProfile', upload.single('image'), async (req, res) => {
 });*/
 
 // add Product
+server.get('/add-product', async (req, res) => {
+  const profiles = await user.find(); // Ensure there is at least one profile before adding a product
+  if (profiles.length === 0) {
+      return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
+  }
+  res.render('addProduct');
+});
 
 server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
@@ -191,10 +192,32 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
 });
 
 // Read Products
+
 server.get('/readProducts', async (req, res) => {
   let products = await Product.find();
-  res.render('readProducts', { products });
+  res.render('readProducts', { products })});
+
+
+
+router.get('/read-product/:category', async (req, res) => {
+  try {
+    // Step 1: Extract the category name from the request parameters
+    const categoryName = req.params.category.toLowerCase(); // Ensure case-insensitive comparison
+    // Step 3: Fetch products directly based on the category string in the Product model
+    const products = await Product.find({ category: categoryName });
+
+    // Step 4: Render the specific page for the category
+    return res.render(readProducts[categoryName], {
+    // styles: '/css/globalStyle.css', 
+      title: `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} and Related Items`,
+      products
+    });
+  } catch (err) {
+    console.error(err); // Log any errors
+    res.status(500).send("Error retrieving products.");
+  }
 });
+
  
 //shafqaat end
 
