@@ -1,6 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const multer = require('multer') ;
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+
 
 let Product = require("./models/product.model");
 let user = require("./models/user.model");
@@ -24,20 +27,24 @@ server.use(express.urlencoded({extended : true} ));
 
 
 // Set up storage for multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads'); // Directory to store files
-  },
-  filename: function (req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique file name
+cloudinary.config({
+  cloud_name: "dwu0k8o5c",
+  api_key: "845284654399189",
+  api_secret: "XVgZm8ajlHu6SxIBUd7K94A-2yc",
+});
+
+
+// Multer Cloudinary storage setup
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "uploads", // Cloudinary folder name
+    allowed_formats: ["jpg", "png", "jpeg"], // Allowed file types
   },
 });
 
+
 const upload = multer({ storage: storage });
-
-
-
-
 
 let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
 mongoose
@@ -81,7 +88,7 @@ server.get('/readProfile', async (req, res) => {
 server.post('/addProfile', upload.single('image'), async (req, res) => {
   try {
       const {  storename, name, description } = req.body;
-      const image = req.file ? req.file.path : null; // Get file path
+      const image = req.file ? req.file.path.secure_url : null;  // Get file path
       await user.create({ image, storename, name, description });
       res.redirect('/readProfile'); // Redirect to the profile listing page
       console.log("Form data:", req.body);
@@ -137,7 +144,7 @@ server.get('/editProfile/:id', async (req, res) => {
 // Update Profile
 server.post('/updateProfile/:id', upload.single('image'), async (req, res) => {
   const { storename, name, description } = req.body;
-  const image = req.file ? req.file.path : null;
+  const image = req.file ? req.file.path.secure_url : null; 
   let updatedProfile = await user.findByIdAndUpdate(
     req.params.id,
     { image, username, name, description },
@@ -168,7 +175,7 @@ app.post('/createProfile', upload.single('image'), async (req, res) => {
 server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
       const { name, price, description } = req.body;
-      const image = req.file ? req.file.path : null; // Save the file path
+      const image = req.file ? req.file.path.secure_url : null;  // Save the file path
       const product = new Product({
           name,
           price,
