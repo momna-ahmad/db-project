@@ -1,7 +1,7 @@
 
 
     <div class="container position-relative">
-        <a href="/" class="back-btn">
+        <a href="/readProfile?userId=<%= userId %>" class="back-btn">
             home
             <i class="fa-solid fa-arrow-left"></i>
         </a>
@@ -11,27 +11,27 @@
         </button>
 
         <!-- Profile Section -->
-        <% if (Profiles.length > 0) { %>
-            <% Profiles.forEach(profile => { %>
+        <% if (Profiles) { %>
+            
                 <div class="profile-container">
                     <div class="profile_username">
-                        <h1 style="font-size: medium;"><%= profile.username %></h1>
+                        <h1 style="font-size: medium;"><%= Profiles.username %></h1>
                     </div>
                     <div class="store-heading">
-                        <p class="text-muted"><%= profile.description %></p>
-                        <a href="/editProfile/<%= profile._id %>" class="btn btn-primary btn-sm" style="width:100px;">Edit</a>
+                        <p class="text-muted"><%= Profiles.description %></p>
+                        <a href="/editProfile/<%= Profiles._id %>" class="btn btn-primary btn-sm" style="width:100px;">Edit</a>
                         
                     </div>
                 </div>
-            <% }) %>
+            
         <% } else { %>
             <h2>No profile yet</h2>
             
         <% } %>
 
         <!-- Product Section -->
-        <% if (Profiles.length > 0) { %>
-            <a href="/addProduct" class="btn btn-sm btn-primary mt-5 mb-4">Add Products</a>
+        <% if (Profiles) { %>
+            
 
             <div class="row g-4">
 
