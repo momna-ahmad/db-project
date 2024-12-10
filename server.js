@@ -39,7 +39,7 @@ const upload = multer({ storage: storage });
 
 
 
-let connectionString = "mongodb://localhost/vintasy";
+let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
 mongoose
   .connect(connectionString)
   .then( async () =>
@@ -57,14 +57,20 @@ server.get('/', (req, res) => {
 // Read Profile
 server.get('/readProfile', async (req, res) => {
   try {
+    const userId = req.query.userId; // Get the userId from the query parameter
+
+        if (!userId) {
+            return res.status(400).send("User ID is required.");
+        }
       // Fetch user profiles
-      console.log(req.id) ;
-      let Profiles = await user.find();
+     
+      let Profiles = await user.findById(userId);
+      console.log(Profiles) ;
       
       // Fetch products associated with the profile (assuming products have a `profileId` field)
       let products = await Product.find(); // Optionally filter products by profileId
       
-      res.render('readProfile', { Profiles, products });
+      return res.render("partials/readProfile", {layout : 'profilelayout' , Profiles, products , stylesheet : '/css/styles2' });
   } catch (error) {
       console.error(error);
       res.status(500).send("An error occurred while fetching profiles and products.");
@@ -104,7 +110,7 @@ server.post('/admin/sign-in', async (req, res) => {
       await newUser.save() ;
         //const { username, password, name } = req.body;
         //await user.create({ username,password, name});
-        return res.render('partials/profile'); // Redirect to the profile listing page
+        return res.render('partials/profile', { userId: newUser._id }); // Redirect to the profile listing page
     } catch (error) {
         console.error("Error creating profile:", error);
         res.status(500).send("An error occurred while creating the profile.");
