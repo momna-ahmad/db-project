@@ -70,7 +70,7 @@ server.get('/readProfile', async (req, res) => {
       // Fetch products associated with the profile (assuming products have a `profileId` field)
       let products = await Product.find(); // Optionally filter products by profileId
       
-      return res.render("partials/readProfile", {layout : 'profilelayout' , Profiles, products , stylesheet : '/css/styles2' });
+      return res.render("partials/readProfile", {layout : 'profileForm' , Profiles, products , stylesheet : '/css/styles2' });
   } catch (error) {
       console.error(error);
       res.status(500).send("An error occurred while fetching profiles and products.");
