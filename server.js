@@ -1,9 +1,13 @@
+
+
 const express = require("express");
 const mongoose = require("mongoose");
+
 const { v2: cloudinary } = require("cloudinary");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
+let server = express();
 
 let Product = require("./models/product.model");
 let user = require("./models/user.model");
@@ -12,7 +16,7 @@ let cart = require("./models/shoppingCart.model");
 
 
 var expressLayouts = require("express-ejs-layouts");
-let server = express();
+
 server.set("view engine", "ejs");
 server.use(expressLayouts);
 
@@ -54,6 +58,7 @@ mongoose
       console.log("Connected to Mongo DB Server: " + connectionString);
     } )
   .catch((error) => console.log(error.message));
+
 
 //shafqaat
 // Homepage route
@@ -165,6 +170,7 @@ app.post('/createProfile', upload.single('image'), async (req, res) => {
 });*/
 
 // add Product
+//route to render a product creation form
 server.get('/add-product', async (req, res) => {
   const profiles = await user.find(); // Ensure there is at least one profile before adding a product
   if (profiles.length === 0) {
@@ -172,7 +178,7 @@ server.get('/add-product', async (req, res) => {
   }
   res.render('addProduct');
 });
-
+//route to add new product
 server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
       const { name, price, description } = req.body;
@@ -190,16 +196,16 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
       res.status(500).send("An error occurred while adding the product.");
   }
 });
-
-// Read Products
-
 server.get('/readProducts', async (req, res) => {
   let products = await Product.find();
   res.render('readProducts', { products })});
+//Kiran part start
+// Read Products
 
-
-
-server.get('/read-product/:category', async (req, res) => {
+  
+  
+  
+server.get('/productRead/:category', async (req, res) => {
   try {
     // Step 1: Extract the category name from the request parameters
     const categoryName = req.params.category.toLowerCase(); // Ensure case-insensitive comparison
@@ -218,7 +224,83 @@ server.get('/read-product/:category', async (req, res) => {
   }
 });
 
- 
+
+
+server.get("/product/edit/:id", async (req, res) => {
+  try {
+    const { id } = req.params;  // Get the product ID from the URL parameter
+    const product = await Product.findById(id);  // Find the product by ID
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });  // If the product doesn't exist
+    }
+    // Render the product edit form and pass the product data to it
+    res.render("/product-edit-form", {
+         // Set the layout for the page
+      product,  // Pass the product data to the form for editing
+     
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Invalid Server Error" });  // Handle any server errors
+  }
+});
+//route to delete a product 
+server.post("/product/delete/:id", async(req, res) => {
+  try{
+    let product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) {
+      return res.status(404).send("Product not found.");
+    }
+
+    res.redirect('/readProducts');
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting product.");
+  }
+});
+
+
+//route for updation of product
+
+server.post("/product/edit/:id",  upload.single('productImage'), async (req, res) => {
+  try {
+    // Find the product by ID
+    let product = await Product.findById(req.params.id);
+
+    // Get updated product data from request body
+    let data = req.body;
+
+    // Check if a new image is uploaded
+    if (req.file) {
+      // If the product already has an image, delete it from Cloudinary
+      if (product.image) {
+        const imageName = product.image.split('/').pop().split('.')[0]; // Extract image public ID from URL
+        await cloudinary.uploader.destroy(imageName); // Delete old image from Cloudinary
+      }
+
+      // Upload the new image to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'product_images', // Optional: specify the folder on Cloudinary
+        use_filename: true,
+      });
+
+      // Store the Cloudinary URL of the uploaded image
+      data.image = result.secure_url;
+    }
+
+    // Update the product with the new data (including the new image URL if uploaded)
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, data, { new: true });
+
+    // Redirect to the products page
+    res.redirect('/productRead');
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating product.");
+  }
+});
+//kiran Part end
 //shafqaat end
 
 
