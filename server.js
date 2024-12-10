@@ -199,7 +199,7 @@ server.get('/readProducts', async (req, res) => {
 
 
 
-router.get('/read-product/:category', async (req, res) => {
+server.get('/read-product/:category', async (req, res) => {
   try {
     // Step 1: Extract the category name from the request parameters
     const categoryName = req.params.category.toLowerCase(); // Ensure case-insensitive comparison
