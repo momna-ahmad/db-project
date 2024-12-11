@@ -39,7 +39,8 @@ const upload = multer({ storage: storage });
 
 
 
-let connectionString = "mongodb://localhost/vintasy";
+let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
+
 mongoose
   .connect(connectionString)
   .then( async () =>
@@ -148,23 +149,29 @@ server.get('/deleteProfile/:id', async (req, res) => {
   res.redirect('/readProfile');
 });
 
-/* Create Profile
-app.post('/createProfile', upload.single('image'), async (req, res) => {
-  const { storename, name, description } = req.body;
-  const image = req.file ? req.file.path : null;
-  let newProfile = new Profile({ image, storename, name, description });
-  await newProfile.save();
-  res.redirect('/readProfile');
-});*/
 
-// add Product
+// Delete Product
+server.get('/deleteProduct/:id', async (req, res) => {
+  try {
+      const productId = req.params.id;
+      await Product.findByIdAndDelete(productId); // Deletes the product with the given ID
+      res.redirect('/readProfile'); // Redirect to the products listing page
+  } catch (error) {
+      console.error("Error deleting product:", error);
+      res.status(500).send("An error occurred while deleting the product.");
+  }
+});
+
+
+//addproduct
 
 server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
-      const { name, price, description } = req.body;
-      const image = req.file ? req.file.path : null; // Save the file path
+      const { name, price, description, category } = req.body; // Include category
+      const image = req.file ? req.file.path : null;
       const product = new Product({
           name,
+          category, // Save the category
           price,
           description,
           image,
@@ -176,6 +183,7 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
       res.status(500).send("An error occurred while adding the product.");
   }
 });
+
 
 // Read Products
 server.get('/readProducts', async (req, res) => {
