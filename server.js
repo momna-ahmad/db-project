@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require('multer') ;
 
+const { v2: cloudinary } = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
 let Product = require("./models/product.model");
 let user = require("./models/user.model");
 let order = require("./models/order.model");
@@ -12,7 +15,7 @@ var expressLayouts = require("express-ejs-layouts");
 let server = express();
 server.set("view engine", "ejs");
 server.use(expressLayouts);
-server.use('/uploads', express.static('uploads'));
+
 
 
 //expose public folder for publically accessible static files
