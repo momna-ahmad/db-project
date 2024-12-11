@@ -43,6 +43,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
+<<<<<<< HEAD
 
 
 
@@ -75,7 +76,6 @@ server.get('/readProfile', async (req, res) => {
         if (!userId) {
             return res.status(400).send("User ID is required.");
         }
-  try {
       // Fetch user profiles
      
       let Profiles = await user.findById(userId);
@@ -95,6 +95,7 @@ server.get('/readProfile', async (req, res) => {
 server.post('/addProfile', upload.single('image'), async (req, res) => {
   try {
       const {  storename, name, description } = req.body;
+<<<<<<< HEAD
       const image = req.file ? `/uploads/${req.file.filename}` : null;
 =======
       const image = req.file ? req.file.path.secure_url : null;  // Get file path
