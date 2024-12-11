@@ -12,6 +12,7 @@ var expressLayouts = require("express-ejs-layouts");
 let server = express();
 server.set("view engine", "ejs");
 server.use(expressLayouts);
+server.use('/uploads', express.static('uploads'));
 
 
 //expose public folder for publically accessible static files
@@ -76,7 +77,7 @@ server.get('/readProfile', async (req, res) => {
 server.post('/addProfile', upload.single('image'), async (req, res) => {
   try {
       const {  storename, name, description } = req.body;
-      const image = req.file ? req.file.path : null; // Get file path
+      const image = req.file ? `/uploads/${req.file.filename}` : null;
       await user.create({ image, storename, name, description });
       res.redirect('/readProfile'); // Redirect to the profile listing page
       console.log("Form data:", req.body);
@@ -132,7 +133,7 @@ server.get('/editProfile/:id', async (req, res) => {
 // Update Profile
 server.post('/updateProfile/:id', upload.single('image'), async (req, res) => {
   const { storename, name, description } = req.body;
-  const image = req.file ? req.file.path : null;
+  const image = req.file ? `/uploads/${req.file.filename}` : null;
   let updatedProfile = await user.findByIdAndUpdate(
     req.params.id,
     { image, username, name, description },
