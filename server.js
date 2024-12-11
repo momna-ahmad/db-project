@@ -124,7 +124,7 @@ server.get('/addProduct', async (req, res) => {
   if (profiles.length === 0) {
       return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
   }
-  res.render('addProduct');
+  res.render('./partials/addProduct');
 });
 
 
@@ -163,9 +163,13 @@ app.post('/createProfile', upload.single('image'), async (req, res) => {
   res.redirect('/readProfile');
 });*/
 
+server.get("/addProduct", async(req,res) =>{
+
+  return res.render("partials/addProduct", {layout: "profileForm"}) ;
+});
 // add Product
 
-server.post('/add-product', upload.single('image'), async (req, res) => {
+server.post('/addProduct', upload.single('image'), async (req, res) => {
   try {
       const { name, price, description } = req.body;
       const image = req.file ? req.file.path : null; // Save the file path
@@ -183,15 +187,32 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
   }
 });
 
-// Read Products
-server.get('/readProducts', async (req, res) => {
-  let products = await Product.find();
-  res.render('readProducts', { products });
-});
+
  
 //shafqaat end
 
 
+
+
+server.get('/products/mensclothing', async (req,res)=>{
+  try {
+    // Find products where category is 'men'
+    const products = await Product.find({ category: 'men' });
+    console.log(products) ;
+    // Check if products were found
+    if (products.length > 0) {
+      // Render a page to display the products or send the products as JSON
+      return res.render('partials/productList', { products });
+    } else {
+      // If no products are found, return a message or render an empty product list
+      return res.render('partials/productList', { message: 'No products found in this category.' });
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return res.status(500).send("An error occurred while fetching products.");
+  }
+
+})
 server.listen(5000, () => {
   console.log(`Server Started at localhost:5000`);
 });

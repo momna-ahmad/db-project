@@ -1,7 +1,7 @@
 
 
     <div class="container position-relative">
-        <a href="/readProfile?userId=<%= userId %>" class="back-btn">
+        <a href="/readProfile?userId=<%= Profiles._id %>" class="back-btn">
             home
             <i class="fa-solid fa-arrow-left"></i>
         </a>
@@ -53,7 +53,9 @@
                                 </div>
                             </div>
                         </div>
+                        
                     <% }) %>
+                    <a href="/addProduct" class="btn btn-md btn-primary m-3">Add Products</a>
                 <% } else { %>
                     <h2>No products yet</h2>
                     <a href="/addProduct" class="btn btn-md btn-primary m-3">Add Products</a>
