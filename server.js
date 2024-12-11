@@ -1,13 +1,6 @@
-
-
 const express = require("express");
 const mongoose = require("mongoose");
-
-const { v2: cloudinary } = require("cloudinary");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const multer = require("multer");
-
-let server = express();
+const multer = require('multer') ;
 
 let Product = require("./models/product.model");
 let user = require("./models/user.model");
@@ -16,9 +9,10 @@ let cart = require("./models/shoppingCart.model");
 
 
 var expressLayouts = require("express-ejs-layouts");
-
+let server = express();
 server.set("view engine", "ejs");
 server.use(expressLayouts);
+server.use('/uploads', express.static('uploads'));
 
 
 //expose public folder for publically accessible static files
@@ -47,10 +41,18 @@ const storage = new CloudinaryStorage({
   },
 });
 
-
 const upload = multer({ storage: storage });
 
+<<<<<<< HEAD
+
+
+
+
 let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
+
+=======
+let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
+>>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
 mongoose
   .connect(connectionString)
   .then( async () =>
@@ -93,7 +95,11 @@ server.get('/readProfile', async (req, res) => {
 server.post('/addProfile', upload.single('image'), async (req, res) => {
   try {
       const {  storename, name, description } = req.body;
+<<<<<<< HEAD
+      const image = req.file ? `/uploads/${req.file.filename}` : null;
+=======
       const image = req.file ? req.file.path.secure_url : null;  // Get file path
+>>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
       await user.create({ image, storename, name, description });
       res.redirect('/readProfile'); // Redirect to the profile listing page
       console.log("Form data:", req.body);
@@ -150,7 +156,11 @@ server.get('/editProfile/:id', async (req, res) => {
 // Update Profile
 server.post('/updateProfile/:id', upload.single('image'), async (req, res) => {
   const { storename, name, description } = req.body;
+<<<<<<< HEAD
+  const image = req.file ? `/uploads/${req.file.filename}` : null;
+=======
   const image = req.file ? req.file.path.secure_url : null; 
+>>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
   let updatedProfile = await user.findByIdAndUpdate(
     req.params.id,
     { image, username, name, description },
@@ -167,19 +177,35 @@ server.get('/deleteProfile/:id', async (req, res) => {
   res.redirect('/readProfile');
 });
 
-/* Create Profile
-app.post('/createProfile', upload.single('image'), async (req, res) => {
-  const { storename, name, description } = req.body;
-  const image = req.file ? req.file.path : null;
-  let newProfile = new Profile({ image, storename, name, description });
-  await newProfile.save();
-  res.redirect('/readProfile');
-});*/
 
+<<<<<<< HEAD
 server.get("/addProduct", async(req,res) =>{
 
   return res.render("partials/addProduct", {layout: "profileForm"}) ;
 });
+=======
+<<<<<<< HEAD
+// Delete Product
+server.get('/deleteProduct/:id', async (req, res) => {
+  try {
+      const productId = req.params.id;
+      await Product.findByIdAndDelete(productId); // Deletes the product with the given ID
+      res.redirect('/readProfile'); // Redirect to the products listing page
+  } catch (error) {
+      console.error("Error deleting product:", error);
+      res.status(500).send("An error occurred while deleting the product.");
+  }
+});
+
+
+//addproduct
+
+server.post('/add-product', upload.single('image'), async (req, res) => {
+  try {
+      const { name, price, description, category } = req.body; // Include category
+      const image = req.file ? req.file.path : null;
+=======
+>>>>>>> b349451b939da01718c86e39e50ba8cfc49975ab
 // add Product
 
 server.post('/addProduct', upload.single('image'), async (req, res) => {
@@ -196,8 +222,10 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
       const { name, price, description } = req.body;
       const image = req.file ? req.file.path.secure_url : null;  // Save the file path
+>>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
       const product = new Product({
           name,
+          category, // Save the category
           price,
           description,
           image,
@@ -209,9 +237,18 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
       res.status(500).send("An error occurred while adding the product.");
   }
 });
+<<<<<<< HEAD
 
 
  
+=======
+<<<<<<< HEAD
+
+
+// Read Products
+=======
+>>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
+>>>>>>> b349451b939da01718c86e39e50ba8cfc49975ab
 server.get('/readProducts', async (req, res) => {
   let products = await Product.find();
   res.render('readProducts', { products })});
