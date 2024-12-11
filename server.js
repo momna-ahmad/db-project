@@ -43,16 +43,9 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-<<<<<<< HEAD
-
-
-
 
 let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
 
-=======
-let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
 mongoose
   .connect(connectionString)
   .then( async () =>
@@ -95,11 +88,9 @@ server.get('/readProfile', async (req, res) => {
 server.post('/addProfile', upload.single('image'), async (req, res) => {
   try {
       const {  storename, name, description } = req.body;
-<<<<<<< HEAD
-      const image = req.file ? `/uploads/${req.file.filename}` : null;
-=======
+
       const image = req.file ? req.file.path.secure_url : null;  // Get file path
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
+
       await user.create({ image, storename, name, description });
       res.redirect('/readProfile'); // Redirect to the profile listing page
       console.log("Form data:", req.body);
@@ -149,11 +140,9 @@ server.get('/editProfile/:id', async (req, res) => {
 // Update Profile
 server.post('/updateProfile/:id', upload.single('image'), async (req, res) => {
   const { storename, name, description } = req.body;
-<<<<<<< HEAD
-  const image = req.file ? `/uploads/${req.file.filename}` : null;
-=======
+
   const image = req.file ? req.file.path.secure_url : null; 
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
+
   let updatedProfile = await user.findByIdAndUpdate(
     req.params.id,
     { image, username, name, description },
@@ -171,9 +160,8 @@ server.get('/deleteProfile/:id', async (req, res) => {
 });
 
 
-<<<<<<< HEAD
 // Delete Product
-server.get('/deleteProduct/:id', async (req, res) => {
+server.get('/product/deleteProduct/:id', async (req, res) => {
   try {
       const productId = req.params.id;
       await Product.findByIdAndDelete(productId); // Deletes the product with the given ID
@@ -187,11 +175,8 @@ server.get('/deleteProduct/:id', async (req, res) => {
 
 //addproduct
 
-server.post('/add-product', upload.single('image'), async (req, res) => {
-  try {
-      const { name, price, description, category } = req.body; // Include category
-      const image = req.file ? req.file.path : null;
-=======
+
+
 // add Product
 //route to render a product creation form
 server.get('/add-product', async (req, res) => {
@@ -206,7 +191,7 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
       const { name, price, description } = req.body;
       const image = req.file ? req.file.path.secure_url : null;  // Save the file path
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
+
       const product = new Product({
           name,
           category, // Save the category
@@ -221,12 +206,6 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
       res.status(500).send("An error occurred while adding the product.");
   }
 });
-<<<<<<< HEAD
-
-
-// Read Products
-=======
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
 server.get('/readProducts', async (req, res) => {
   let products = await Product.find();
   res.render('readProducts', { products })});
@@ -236,7 +215,7 @@ server.get('/readProducts', async (req, res) => {
   
   
   
-server.get('/productRead/:category', async (req, res) => {
+server.get('/product/productRead/:category', async (req, res) => {
   try {
     // Step 1: Extract the category name from the request parameters
     const categoryName = req.params.category.toLowerCase(); // Ensure case-insensitive comparison
