@@ -1,6 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const multer = require('multer') ;
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+
 
 let Product = require("./models/product.model");
 let user = require("./models/user.model");
@@ -23,6 +27,9 @@ server.use(express.static("public"));
 // add support for fetching data from request body
 server.use(express.urlencoded({extended : true} ));
 
+//catogory handler
+let categoryRouter = require("./controllers/categories.momina");
+server.use(categoryRouter);
 
 // Set up storage for multer
 cloudinary.config({
@@ -95,11 +102,7 @@ server.get('/readProfile', async (req, res) => {
 server.post('/addProfile', upload.single('image'), async (req, res) => {
   try {
       const {  storename, name, description } = req.body;
-<<<<<<< HEAD
       const image = req.file ? `/uploads/${req.file.filename}` : null;
-=======
-      const image = req.file ? req.file.path.secure_url : null;  // Get file path
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
       await user.create({ image, storename, name, description });
       res.redirect('/readProfile'); // Redirect to the profile listing page
       console.log("Form data:", req.body);
@@ -156,11 +159,7 @@ server.get('/editProfile/:id', async (req, res) => {
 // Update Profile
 server.post('/updateProfile/:id', upload.single('image'), async (req, res) => {
   const { storename, name, description } = req.body;
-<<<<<<< HEAD
   const image = req.file ? `/uploads/${req.file.filename}` : null;
-=======
-  const image = req.file ? req.file.path.secure_url : null; 
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
   let updatedProfile = await user.findByIdAndUpdate(
     req.params.id,
     { image, username, name, description },
