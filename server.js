@@ -351,6 +351,15 @@ server.get('/products/mensclothing', async (req,res)=>{
   }
 
 })
+
+const checkoutController = require('./controllers/checkout.controller');
+
+// Route to render the checkout page
+router.get('/checkout', checkout.controller.renderCheckoutPage);
+
+// Route to handle checkout form submission
+router.post('/checkout', checkout.controller.processCheckout);
+
 server.listen(5000, () => {
   console.log(`Server Started at localhost:5000`);
 });
