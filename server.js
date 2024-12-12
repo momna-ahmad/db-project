@@ -50,16 +50,9 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-<<<<<<< HEAD
-
-
-
 
 let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
 
-=======
-let connectionString = "mongodb+srv://momnaahmdd:thri1ft7mo@vintasycluster.hpn5p.mongodb.net/";
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
 mongoose
   .connect(connectionString)
   .then( async () =>
@@ -177,13 +170,13 @@ server.get('/deleteProfile/:id', async (req, res) => {
 });
 
 
-<<<<<<< HEAD
+
 server.get("/addProduct", async(req,res) =>{
 
   return res.render("partials/addProduct", {layout: "profileForm"}) ;
 });
-=======
-<<<<<<< HEAD
+
+
 // Delete Product
 server.get('/deleteProduct/:id', async (req, res) => {
   try {
@@ -199,29 +192,15 @@ server.get('/deleteProduct/:id', async (req, res) => {
 
 //addproduct
 
-server.post('/add-product', upload.single('image'), async (req, res) => {
-  try {
-      const { name, price, description, category } = req.body; // Include category
-      const image = req.file ? req.file.path : null;
-=======
->>>>>>> b349451b939da01718c86e39e50ba8cfc49975ab
-// add Product
 
-server.post('/addProduct', upload.single('image'), async (req, res) => {
-//route to render a product creation form
-server.get('/add-product', async (req, res) => {
-  const profiles = await user.find(); // Ensure there is at least one profile before adding a product
-  if (profiles.length === 0) {
-      return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
-  }
-  res.render('addProduct');
-});
+
+
 //route to add new product
 server.post('/add-product', upload.single('image'), async (req, res) => {
   try {
       const { name, price, description } = req.body;
       const image = req.file ? req.file.path.secure_url : null;  // Save the file path
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
+
       const product = new Product({
           name,
           category, // Save the category
@@ -236,23 +215,25 @@ server.post('/add-product', upload.single('image'), async (req, res) => {
       res.status(500).send("An error occurred while adding the product.");
   }
 });
-<<<<<<< HEAD
+
 
 
  
-=======
-<<<<<<< HEAD
+
+
 
 
 // Read Products
-=======
->>>>>>> d0db5701cd9adc8c7e16255481e8cc85bf2adc89
->>>>>>> b349451b939da01718c86e39e50ba8cfc49975ab
+
+
 server.get('/readProducts', async (req, res) => {
   let products = await Product.find();
-  res.render('readProducts', { products })});
+  res.render('readProducts', { products })
+}
+);
 //Kiran part start
 // Read Products
+
 
   
   
@@ -358,25 +339,7 @@ server.post("/product/edit/:id",  upload.single('productImage'), async (req, res
 
 
 
-server.get('/products/mensclothing', async (req,res)=>{
-  try {
-    // Find products where category is 'men'
-    const products = await Product.find({ category: 'men' });
-    console.log(products) ;
-    // Check if products were found
-    if (products.length > 0) {
-      // Render a page to display the products or send the products as JSON
-      return res.render('partials/productList', { products });
-    } else {
-      // If no products are found, return a message or render an empty product list
-      return res.render('partials/productList', { message: 'No products found in this category.' });
-    }
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return res.status(500).send("An error occurred while fetching products.");
-  }
 
-})
 server.listen(5000, () => {
   console.log(`Server Started at localhost:5000`);
 });

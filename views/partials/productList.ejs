@@ -1,6 +1,6 @@
 <!-- partials/productList.ejs -->
 <div class="container my-5">
-    <h2 class="text-center mb-4">Products in 'Men' Category</h2>
+    <h2 class="text-center mb-4">Products in <%=category  %> Category</h2>
   
     <% if (products && products.length > 0) { %>
       <div class="row g-4">
@@ -15,10 +15,11 @@
                 <h5 class="card-title"><%= product.name %></h5>
   
                 <!-- Product Description -->
+                 <% if(product.description) { %>
                 <p class="card-text text-muted">
                   <%= product.description.length > 100 ? product.description.substring(0, 100) + '...' : product.description %>
                 </p>
-  
+                <% } %>
                 <!-- Product Price -->
                 <p class="price"><%= product.price ? `$${product.price.toFixed(2)}` : 'Price Not Available' %></p>
   
