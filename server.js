@@ -9,12 +9,22 @@ let Product = require("./models/product.model");
 let user = require("./models/user.model");
 let order = require("./models/order.model");
 let cart = require("./models/shoppingCart.model");
+const ejsLayouts = require("express-ejs-layouts"); 
 
 
-var expressLayouts = require("express-ejs-layouts");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+
 let server = express();
+server.use(cookieParser()); // Parse cookies
+server.use(session({ secret: "my session secret", resave: false, saveUninitialized: true })); // Set up sessions
+
+
 server.set("view engine", "ejs");
-server.use(expressLayouts);
+server.use(ejsLayouts);
+// importing controller which render pages on base of category of products
+const userController = require('./controllers/user/user.controller');
+server.use(userController);
 
 
 
@@ -56,7 +66,20 @@ mongoose
       console.log("Connected to Mongo DB Server: " + connectionString);
     } )
   .catch((error) => console.log(error.message));
-
+//CART fucntionality
+server.get("/cart", async (req, res) => {
+  let cart = req.cookies.cart;
+  cart = cart ? cart : [];
+  let products = await Product.find({ _id: { $in: cart } });
+  return res.render("cart", { products });
+});
+server.get("/add-to-cart/:id", (req, res) => {
+  let cart = req.cookies.cart;
+  cart = cart ? cart : [];
+  cart.push(req.params.id);
+  res.cookie("cart", cart);
+  return res.redirect("readProfile");
+});
 
 //shafqaat
 // Homepage route
@@ -69,23 +92,24 @@ server.get('/readProfile', async (req, res) => {
   try {
     const userId = req.query.userId; // Get the userId from the query parameter
 
-        if (!userId) {
-            return res.status(400).send("User ID is required.");
-        }
-      // Fetch user profiles
-     
-      let Profiles = await user.findById(userId);
-      console.log(Profiles) ;
-      
-      // Fetch products associated with the profile (assuming products have a `profileId` field)
-      let products = await Product.find(); // Optionally filter products by profileId
-      
-      return res.render("partials/readProfile", {layout : 'profileForm' , Profiles, products , stylesheet : '/css/styles2' });
+    if (!userId) {
+      return res.status(400).send("User ID is required.");
+    }
+
+    // Fetch user profiles
+    let Profiles = await user.findById(userId);
+    console.log(Profiles);
+
+    // Fetch products associated with the profile
+    let products = await Product.find();
+
+    return res.render("readProfile", { layout: 'profilelayout', Profiles, products });
   } catch (error) {
-      console.error(error);
-      res.status(500).send("An error occurred while fetching profiles and products.");
+    console.error(error);
+    res.status(500).send("An error occurred while fetching profiles and products.");
   }
 });
+
 
 //addProfile
 server.post('/addProfile', upload.single('image'), async (req, res) => {
@@ -131,13 +155,13 @@ server.post('/admin/sign-in', async (req, res) => {
 
 
 // Route to render the Add Product form
-server.get('/addProduct', async (req, res) => {
-  const profiles = await user.find(); // Ensure there is at least one profile before adding a product
-  if (profiles.length === 0) {
-      return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
-  }
-  res.render('./partials/addProduct');
-});
+// server.get('/addProduct', async (req, res) => {
+//   const profiles = await user.find(); // Ensure there is at least one profile before adding a product
+//   if (profiles.length === 0) {
+//       return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
+//   }
+//   res.render('./partials/addProduct');
+// });
 
 
 
@@ -195,20 +219,21 @@ server.get('/admin/add-product', async (req, res) => {
   if (profiles.length === 0) {
       return res.redirect('/readProfile'); // Redirect to readProfile if no profile exists
   }
-  res.render('addProduct',{layout: "profileForm"});
+  res.render('admin/addProduct',{layout: "profileForm"});
 });
 //route to add new product
 server.post('/admin/add-product', upload.single('image'), async (req, res) => {
   try {
       const { name, price, description } = req.body;
-      const image = req.file ? req.file.path.secure_url : null;  // Save the file path
+      const file = req.file;
+      const imageUrl = file ? file.path : null;  // Save the file path
 
       const product = new Product({
           name,
           category, // Save the category
           price,
           description,
-          image,
+          image: imageUrl,
       });
       await product.save();
       res.redirect('/readProfile');
@@ -302,7 +327,7 @@ server.post("/product/edit/:id",  upload.single('productImage'), async (req, res
       // If the product already has an image, delete it from Cloudinary
       if (product.image) {
         const imageName = product.image.split('/').pop().split('.')[0]; // Extract image public ID from URL
-        await cloudinary.uploader.destroy(imageName); // Delete old image from Cloudinary
+        await cloudinary.upload.destroy(imageName); // Delete old image from Cloudinary
       }
 
       // Upload the new image to Cloudinary
