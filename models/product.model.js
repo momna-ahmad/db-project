@@ -12,10 +12,10 @@ let productSchema = mongoose.Schema({
   },
   price: Number ,
 
-  picture : [{
-    name : String ,
-    imgUrl : String
-  }],
+  picture: {
+    name: String,
+    imgUrl: String
+  },
 
   seller : {
     type: mongoose.Schema.Types.ObjectId,

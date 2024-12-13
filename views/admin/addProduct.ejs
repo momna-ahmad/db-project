@@ -2,23 +2,12 @@
     <div class="card shadow-lg" style="width: 28rem;">
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Add Product</h2>
-            <form action="/admin/add-product" method="POST" enctype="multipart/form-data">
+            <form action="/admin/products/create" method="POST" enctype="multipart/form-data">
+               
                 <!-- Product Name -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Product Name</label>
                     <input type="text" id="name" name="name" class="form-control" placeholder="Enter product name" required>
-                </div>
-                <!-- Category -->
-                <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <select id="category" name="category" class="form-control" required>
-                        <option value="">Select a category</option>
-                        <option value="Men Clothing">Men Clothing</option>
-                        <option value="Women Clothing">Women Clothing</option>
-                        <option value="Accessories">Accessories</option>
-                        <option value="Footwear">Footwear</option>
-                        <option value="Vintage Pieces">Vintage Pieces</option>
-                    </select>
                 </div>
                 <!-- Price -->
                 <div class="mb-3">
@@ -43,6 +32,29 @@
                         <option value="false">No</option>
                     </select>
                 </div>
+                <!-- Category -->
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="">Select a category</option>
+                        <option value="Men Clothing">Men Clothing</option>
+                        <option value="Women Clothing">Women Clothing</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Footwear">Footwear</option>
+                        <option value="Vintage Pieces">Vintage Pieces</option>
+                    </select>
+                </div>
+                 <!-- Seller Name Dropdown -->
+                 <div class="mb-3">
+                    <label for="seller" class="form-label">Seller Name</label>
+                    <select id="seller" name="sellerId" class="form-control" required>
+                        <option value="">Select a seller</option>
+                        <% for (let i = 0; i < users.length; i++) { %>
+                            <option value="<%= users[i]._id %>"><%= users[i].name %></option>
+                        <% } %>
+                    </select>
+                </div>
+              
                 <button type="submit" class="btn btn-primary w-100">Add Product</button>
             </form>
         </div>
