@@ -1,14 +1,16 @@
 
 
     <div class="container position-relative">
-        <a href="/readProfile?userId=<%= Profiles._id %>" class="back-btn">
+        <a href="/" class="back-btn">
             home
             <i class="fa-solid fa-arrow-left"></i>
         </a>
         <!-- Cart Button -->
-        <button class="cart-btn">
+        <button class="cart-btn" onclick="window.location.href='/cart'">
             <i class="bi bi-cart"></i>
         </button>
+        
+        
 
         <!-- Profile Section -->
         <% if (Profiles) { %>
@@ -45,6 +47,8 @@
                                     <h2><%= product.name %></h2>
                                     <div class="prod-price">
                                         <h5 class="card-title"><%= product.price %></h5>
+                                        
+  
                                         <span class="product-status in-stock"><%= product.status %></span> </div>
                                         <div><a href="/editProduct/<%= product._id %>" class="btn btn-primary btn-sm" style="width:100px;">Edit</a>
  <a href="/deleteProduct/<%= product._id %>" class="btn btn-danger btn-sm" style="width:100px;">Delete</a>
@@ -56,10 +60,10 @@
                         </div>
                         
                     <% }) %>
-                    <a href="/addProduct" class="btn btn-md btn-primary m-3">Add Products</a>
+                    <a href="/admin/add-product" class="btn btn-md btn-primary m-3">Add Products</a>
                 <% } else { %>
                     <h2>No products yet</h2>
-                    <a href="/addProduct" class="btn btn-md btn-primary m-3">Add Products</a>
+                    <a href="/admin/add-product" class="btn btn-md btn-primary m-3">Add Products</a>
                 <% } %>
             </div>
         <% } %>
