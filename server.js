@@ -68,11 +68,16 @@ mongoose
   .catch((error) => console.log(error.message));
 //CART fucntionality
 server.get("/cart", async (req, res) => {
-  let cart = req.cookies.cart;
-  cart = cart ? cart : [];
-  let products = await Product.find({ _id: { $in: cart } });
-  return res.render("cart", { products });
+  try {
+    let cart = req.cookies.cart || [];
+    let products = await Product.find({ _id: { $in: cart } });
+    return res.render("cart", { layout: "cartLayout", products });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return res.status(500).send("Internal Server Error");
+  }
 });
+
 server.get("/add-to-cart/:id", (req, res) => {
   let cart = req.cookies.cart;
   cart = cart ? cart : [];
@@ -92,23 +97,32 @@ server.get('/readProfile', async (req, res) => {
   try {
     const userId = req.query.userId; // Get the userId from the query parameter
 
-    if (!userId) {
-      return res.status(400).send("User ID is required.");
+    // if (!userId) {
+    //   return res.status(400).send("User ID is required.");
+    // }
+
+    // Fetch user profile
+    const profile = await user.findById(userId);
+    if (!profile) {
+      return res.status(404).send("User not found.");
     }
+    console.log(profile);
 
-    // Fetch user profiles
-    let Profiles = await user.findById(userId);
-    console.log(Profiles);
+    // Fetch products where seller matches the user's username
+    const products = await Product.find({ seller: profile.username });
 
-    // Fetch products associated with the profile
-    let products = await Product.find();
-
-    return res.render("readProfile", { layout: 'profilelayout', Profiles, products });
+    // Render the readProfile view
+    return res.render("readProfile", { 
+      layout: 'profilelayout', 
+      Profiles: profile, 
+      products 
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while fetching profiles and products.");
   }
 });
+
 
 
 //addProfile

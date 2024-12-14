@@ -1,33 +1,23 @@
 <div class="container">
     <h4>Shopping Cart</h4>
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <table class="table">
+        <thead>
             <tr>
                 <th>Product</th>
                 <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
             </tr>
         </thead>
         <tbody>
             <% products.forEach(product => { %>
-                <tr>
-                    <td><%= product.title %></td>
-                    <td>$<%= product.price.toFixed(2) %></td>
-                    <td><%= product.quantity %></td>
-                    <td>$<%= product.totalPrice.toFixed(2) %></td>
-                </tr>
+             <tr>
+                 <td><%= product.title %></td>
+                 <td><%= product.price %></td>
+             </tr>
             <% }) %>
         </tbody>
     </table>
-
-    <!-- Display Total Price -->
-    <div class="total-price">
-        <h5>Total Price: $<%= totalCartPrice.toFixed(2) %></h5>
-    </div>
-
-    <div class="btn-container">
-        <button class="btn-checkout">Checkout</button>
-        <button class="btn-close" onclick="window.location.href='/readProfile'">Close</button>
+    <div class="mt-3 d-flex justify-content-between">
+        <button class="btn btn-success">Check Out</button>
+        <a href="/" class="btn btn-danger">Close</a>
     </div>
 </div>
