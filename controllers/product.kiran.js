@@ -78,5 +78,65 @@ router.post('/admin/products/create',upload.single('image'),async (req, res) => 
       res.status(500).send("Error deleting product.");
     }
   });
+  router.get("/admin/editProduct/:id", async (req, res) => {
+    try {
+      const { id } = req.params;  // Get the product ID from the URL parameter
+      const product = await Product.findById(id);  // Find the product by ID
+  
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });  // If the product doesn't exist
+      }
+      // Render the product edit form and pass the product data to it
+      res.render("admin/edit-product-form", {
+            layout:"profileForm",
+           // Set the layout for the page
+            product,  // Pass the product data to the form for editing
+       
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Invalid Server Error" });  // Handle any server errors
+    }
+  });
+  
 
+
+ router.post("/admin/editProduct/:id", upload.single('image'), async (req, res) => {
+    try {
+      // Find the product by ID
+      let product = await Product.findById(req.params.id);
+  
+      // Get updated product data from request body
+      let data = req.body;
+  
+      // Check if a new picture is uploaded
+      if (req.file) {
+        // Use the existing picture's public_id to overwrite it
+        let publicId = product.picture 
+          ? product.picture.split('/').pop().split('.')[0] // Extract public ID from URL
+          : `product_images/${req.params.id}`; // Default public_id if no picture exists
+        
+        // Upload the new picture to Cloudinary, using the same public_id
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          public_id: publicId, // Overwrite the existing picture
+          folder: 'product_images', // Optional: specify folder
+          use_filename: true,      // Retain the original filename
+          overwrite: true          // Ensure the picture is replaced
+        });
+  
+        // Store the Cloudinary URL of the uploaded picture
+        data.picture = result.secure_url;
+      }
+  
+      // Update the product with the new data (including the new picture URL if uploaded)
+      const updatedProduct = await Product.findByIdAndUpdate(req.params.id, data, { new: true });
+  
+      // Redirect to the products page
+      res.redirect('/readProfile');
+  
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error updating product.");
+    }
+  });
+  
   

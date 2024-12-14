@@ -109,7 +109,7 @@ server.get('/readProfile', async (req, res) => {
     console.log(profile);
 
     // Fetch products where seller matches the user's username
-    const products = await Product.find({ seller: profile.username });
+    const products = await Product.find({ seller: profile.name });
 
     // Render the readProfile view
     return res.render("readProfile", { 
@@ -210,16 +210,7 @@ server.get('/deleteProfile/:id', async (req, res) => {
 
 
 // Delete Product
-server.get('/product/deleteProduct/:id', async (req, res) => {
-  try {
-      const productId = req.params.id;
-      await Product.findByIdAndDelete(productId); // Deletes the product with the given ID
-      res.redirect('/readProfile'); // Redirect to the products listing page
-  } catch (error) {
-      console.error("Error deleting product:", error);
-      res.status(500).send("An error occurred while deleting the product.");
-  }
-});
+
 
 
 //addproduct
@@ -230,66 +221,11 @@ server.get('/product/deleteProduct/:id', async (req, res) => {
 
 
 
-server.get("/product/edit/:id", async (req, res) => {
-  try {
-    const { id } = req.params;  // Get the product ID from the URL parameter
-    const product = await Product.findById(id);  // Find the product by ID
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });  // If the product doesn't exist
-    }
-    // Render the product edit form and pass the product data to it
-    res.render("/product-edit-form", {
-         // Set the layout for the page
-      product,  // Pass the product data to the form for editing
-     
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Invalid Server Error" });  // Handle any server errors
-  }
-});
 //route to delete a product 
 
 
 //route for updation of product
 
-server.post("/product/edit/:id",  upload.single('productImage'), async (req, res) => {
-  try {
-    // Find the product by ID
-    let product = await Product.findById(req.params.id);
-
-    // Get updated product data from request body
-    let data = req.body;
-
-    // Check if a new image is uploaded
-    if (req.file) {
-      // If the product already has an image, delete it from Cloudinary
-      if (product.image) {
-        const imageName = product.image.split('/').pop().split('.')[0]; // Extract image public ID from URL
-        await cloudinary.upload.destroy(imageName); // Delete old image from Cloudinary
-      }
-
-      // Upload the new image to Cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'product_images', // Optional: specify the folder on Cloudinary
-        use_filename: true,
-      });
-
-      // Store the Cloudinary URL of the uploaded image
-      data.image = result.secure_url;
-    }
-
-    // Update the product with the new data (including the new image URL if uploaded)
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, data, { new: true });
-
-    // Redirect to the products page
-    res.redirect('/productRead');
-    
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error updating product.");
-  }
-});
 //kiran Part end
 //shafqaat end
 
