@@ -12,12 +12,7 @@ let cart = require("./models/shoppingCart.model");
 const ejsLayouts = require("express-ejs-layouts"); 
 
 
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-
 let server = express();
-server.use(cookieParser()); // Parse cookies
-server.use(session({ secret: "my session secret", resave: false, saveUninitialized: true })); // Set up sessions
 
 
 server.set("view engine", "ejs");
@@ -26,7 +21,9 @@ server.use(ejsLayouts);
 const userController = require('./controllers/user/user.controller');
 server.use(userController);
 const productController = require('./controllers/product.kiran');
+const cartController = require('./controllers/cart.kiran');
 server.use(productController);
+server.use(cartController);
 
 
 
@@ -68,26 +65,6 @@ mongoose
       console.log("Connected to Mongo DB Server: " + connectionString);
     } )
   .catch((error) => console.log(error.message));
-//CART fucntionality
-server.get("/cart", async (req, res) => {
-  try {
-    let cart = req.cookies.cart || [];
-    let products = await Product.find({ _id: { $in: cart } });
-    return res.render("cart", { layout: "cartLayout", products });
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return res.status(500).send("Internal Server Error");
-  }
-});
-
-server.get("/add-to-cart/:id", (req, res) => {
-  let cart = req.cookies.cart;
-  cart = cart ? cart : [];
-  cart.push(req.params.id);
-  res.cookie("cart", cart);
-  return res.redirect("readProfile");
-});
-
 //shafqaat
 // Homepage route
 server.get('/', (req, res) => {
