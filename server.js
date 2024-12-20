@@ -18,8 +18,7 @@ let server = express();
 server.set("view engine", "ejs");
 server.use(ejsLayouts);
 // importing controller which render pages on base of category of products
-const userController = require('./controllers/user/user.controller');
-server.use(userController);
+
 const productController = require('./controllers/product.kiran');
 const cartController = require('./controllers/cart.kiran');
 server.use(productController);
