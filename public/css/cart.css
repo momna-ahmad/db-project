@@ -1,51 +1,74 @@
-body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-}
-
-.container {
-    margin-top: 50px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.offcanvas-body {
+    background-image: url('https://via.placeholder.com/800x600.jpg'); /* Background Image */
+    background-size: cover;
+    background-position: center;
+    color: white; /* Text color */
     padding: 20px;
 }
 
-h4 {
-    color: #343a40;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
+/* Style for the table */
 .table {
-    margin-bottom: 30px;
-}
-
-.btn-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.btn-checkout {
-    background-color: #28a745;
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
+    border-radius: 8px;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
 }
 
-.btn-checkout:hover {
-    background-color: #218838;
+/* Style for table headers */
+.table th {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #f1c40f; /* Golden color for header */
+}
+
+/* Style for buttons */
+.btn-success {
+    background-color: #27ae60;
+    border-color: #27ae60;
+    font-weight: bold;
+}
+
+.btn-warning {
+    background-color: #f39c12;
+    border-color: #f39c12;
 }
 
 .btn-close {
-    background-color: #dc3545;
-    color: white;
+    background-color: transparent;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    color: white;
 }
 
-.btn-close:hover {
-    background-color: #c82333;
+/* Style for form control inputs */
+.form-control-sm {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    color: black;
 }
+
+.offcanvas-header {
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background for header */
+    color: #f39c12;
+}
+.flash-messages {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 9999;
+    max-width: 300px;
+}
+
+/* Flash message styling */
+.flash-message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+}
+
+/* Success message */
+.flash-message{
+    background-color:gold; /* Green */
+    border: 2px solid #218838;
+}
+
+
