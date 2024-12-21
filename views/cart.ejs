@@ -20,7 +20,6 @@
             <tr>
                 <th>Product</th>
                 <th>Price</th>
-                <th>Quantity</th>
                 <th>Total</th>
                 <th>Action</th> <!-- Add a new column for the delete button -->
             </tr>
@@ -30,17 +29,6 @@
                 <tr>
                     <td><%= product.title %></td>
                     <td>$<%= product.price.toFixed(2) %></td>
-                    <td>
-                        <form action="/update-quantity/<%= product._id %>" method="POST" class="d-flex align-items-center">
-                            <input type="number" name="quantity" 
-                                   value="<%= product.quantity %>" 
-                                   min="1" 
-                                   class="form-control form-control-sm me-1"
-                                   style="width: 60px;" />
-                            <button type="submit" class="btn btn-sm btn-warning">Update</button>
-                        </form>
-                    </td>
-                    <td>$<%= product.amount.toFixed(2) %></td>
                     <td>
                         <!-- Cross button to delete the product -->
                         <form action="/remove-product/<%= product._id %>" method="POST">
