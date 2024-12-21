@@ -34,8 +34,11 @@ let userSchema = mongoose.Schema({
       city: String ,
       address: String,
       country : String
+    },
+    order : {
+      type: mongoose.Schema.Types.ObjectId ,
+        ref: 'Order' 
     }
-
     
   });
   
