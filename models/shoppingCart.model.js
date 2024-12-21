@@ -4,10 +4,10 @@ let shoppingCartSchema = mongoose.Schema({
   count : Number ,
   items : [{
     type : mongoose.Schema.Types.ObjectId ,
-    ref : 'product'
+    ref : 'Product'
   }]
 });
 
-let shoppingCartModel = mongoose.model("shoppingCart", shoppingCartSchema);
+let shoppingCartModel = mongoose.model("ShoppingCart", shoppingCartSchema);
 
 module.exports = shoppingCartModel;

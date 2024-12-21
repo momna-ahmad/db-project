@@ -24,9 +24,11 @@ server.use(express.urlencoded({extended : true} ));
 const productController = require('./controllers/product.kiran');
 const checkoutController = require('./controllers/checkout.controller');
 const cartController = require('./controllers/cart.kiran');
+const userController = require('./controllers/user.controller') ;
 server.use(productController);
 server.use(cartController);
 server.use(checkoutController);
+server.use(userController) ;
 
 
 let Product = require("./models/product.model");
@@ -70,38 +72,11 @@ mongoose
 //shafqaat
 // Homepage route
 server.get('/', (req, res) => {
-  res.render("partials/landing")
-});
-
-// Read Profile
-server.get('/readProfile', async (req, res) => {
-  try {
-    const userId = req.query.userId; // Get the userId from the query parameter
-
-    // if (!userId) {
-    //   return res.status(400).send("User ID is required.");
-    // }
-
-    // Fetch user profile
-    const profile = await user.findById(userId);
-    if (!profile) {
-      return res.status(404).send("User not found.");
-    }
-    console.log(profile);
-
-    // Fetch products where seller matches the user's username
-    const products = await Product.find({ seller: profile.name });
-
-    // Render the readProfile view
-    return res.render("readProfile", { 
-      layout: 'profilelayout', 
-      Profiles: profile, 
-      products 
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred while fetching profiles and products.");
-  }
+  if(req.session.user)
+    res.render('partials/profile') ;
+  else
+  res.render("partials/landing");
+  
 });
 
 
@@ -124,29 +99,6 @@ server.post('/addProfile', upload.single('image'), async (req, res) => {
   }
 });
 
-
-// Route to render the Add Profile form
-server.get('/admin/sign-in', (req, res) => {
-  
-  res.render('./partials/sign-in.ejs' , {
-    layout : 'profileForm' 
-  });
-});
-
-server.post('/admin/sign-in', async (req, res) => {
-  
-    try {
-      let data = req.body ;
-      let newUser = new user(data) ;
-      await newUser.save() ;
-        //const { username, password, name } = req.body;
-        //await user.create({ username,password, name});
-        return res.render('partials/profile', { userId: newUser._id }); // Redirect to the profile listing page
-    } catch (error) {
-        console.error("Error creating profile:", error);
-        res.status(500).send("An error occurred while creating the profile.");
-    }
-});
 
 
 // Route to render the Add Product form

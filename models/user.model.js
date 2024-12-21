@@ -14,20 +14,20 @@ let userSchema = mongoose.Schema({
       },
       product: [{
         type : mongoose.Schema.Types.ObjectId,
-        ref: 'product' 
+        ref: 'Product' 
       }] ,
       review : [{
         comment: String ,
         reviewer : {
             type: mongoose.Schema.Types.ObjectId ,
-            ref: 'user'
+            ref: 'User'
         }
       }],
      
     
     cart : {
         type: mongoose.Schema.Types.ObjectId ,
-        ref: 'shoppingCart' 
+        ref: 'ShoppingCart' 
     } ,
 
     location : {
@@ -39,6 +39,6 @@ let userSchema = mongoose.Schema({
     
   });
   
-  let userModel = mongoose.model("user", userSchema);
+  let userModel = mongoose.model("User", userSchema);
   
   module.exports = userModel;

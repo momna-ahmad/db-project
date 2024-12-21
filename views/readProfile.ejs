@@ -14,17 +14,13 @@
         
 
         <!-- Profile Section -->
-        <% if (Profiles) { %>
+        <% if (user) { %>
             
                 <div class="profile-container">
                     <div class="profile_username">
-                        <h1 style="font-size: medium;"><%= Profiles.username %></h1>
+                        <h1 style="font-size: medium;"><%= user.username %></h1>
                     </div>
-                    <div class="store-heading">
-                        <p class="text-muted"><%= Profiles.description %></p>
-                        <a href="/editProfile/<%= Profiles._id %>" class="btn btn-primary btn-sm" style="width:100px;">Edit</a>
-                        
-                    </div>
+                    
                 </div>
             
         <% } else { %>
@@ -33,7 +29,7 @@
         <% } %>
 
         <!-- Product Section -->
-        <% if (Profiles) { %>
+        <% if (products) { %>
             
 
             <div class="row g-4">

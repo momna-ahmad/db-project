@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 let Product = require("../models/product.model");
-let user = require("../models/user.model");
+let User = require("../models/user.model");
 const path = require("path");
 const { v2: cloudinary } = require("cloudinary");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -26,8 +26,8 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 router.get('/admin/add-product', async (req, res) => {
-    const user = await user.find();
-    res.render('admin/addProducts', {
+    const user = await User.find();
+    res.render('admin/addProduct', {
        layout: "profileForm",
       user, 
     });

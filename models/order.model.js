@@ -10,7 +10,7 @@ let orderSchema = mongoose.Schema({
       products: [{
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'product',
+          ref: 'Product',
         }
       }],
       totalAmount: {
@@ -42,6 +42,6 @@ let orderSchema = mongoose.Schema({
       }
 });
 
-let orderModel = mongoose.model("order", orderSchema);
+let orderModel = mongoose.model("Order", orderSchema);
 
 module.exports = orderModel;

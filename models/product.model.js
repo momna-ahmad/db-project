@@ -19,7 +19,7 @@ let productSchema = mongoose.Schema({
 
   seller : {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'User'
   },
   dateAdded : {
     type : Date  ,
