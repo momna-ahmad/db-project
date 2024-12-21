@@ -47,12 +47,7 @@
                  <!-- Seller Name Dropdown -->
                  <div class="mb-3">
                     <label for="seller" class="form-label">Seller Name</label>
-                    <select id="seller" name="sellerId" class="form-control" required>
-                        <option value="">Select a seller</option>
-                        <% for (let i = 0; i < user.length; i++) { %>
-                            <option value="<%= user[i]._id %>"><%= user[i].name %></option>
-                        <% } %>
-                    </select>
+                    <input type="text" id="seller" name="seller" class="form-control" value="<%= seller %>" readonly>
                 </div>
               
                 <button type="submit" class="btn btn-primary w-100">Add Product</button>

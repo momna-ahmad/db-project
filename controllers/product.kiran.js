@@ -25,11 +25,12 @@ const storage = new CloudinaryStorage({
 });
 
 const upload = multer({ storage: storage });
-router.get('/admin/add-product', async (req, res) => {
-    const user = await User.find();
+router.get('/admin/add-product/:userId', async (req, res) => {
+  const userId = req.params.userId; // Get the userId from the route parameter
+  const user = await User.findById(userId);
     res.render('admin/addProduct', {
        layout: "profileForm",
-      user, 
+       seller:user.name, 
     });
 });
 
