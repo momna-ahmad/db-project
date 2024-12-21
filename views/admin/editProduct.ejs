@@ -1,28 +1,34 @@
 <div class="container">
     <div class="card shadow-lg" style="width: 28rem;">
         <div class="card-body">
-            <h2 class="card-title text-center mb-4">Add Product</h2>
-            <form action="/admin/products/create" method="POST" enctype="multipart/form-data">
-               
+            <h2 class="card-title text-center mb-4">Edit Product</h2>
+            <form action="/admin/editProduct/<%= product._id %>" method="POST" enctype="multipart/form-data">
                 <!-- Product Name -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Product Name</label>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter product name" required>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter product name" value="<%= product.name %>" required>
                 </div>
                 <!-- Price -->
                 <div class="mb-3">
                     <label for="price" class="form-label">Price</label>
-                    <input type="number" id="price" name="price" class="form-control" placeholder="Enter price" required>
+                    <input type="number" id="price" name="price" class="form-control" placeholder="Enter price" value="<%= product.price %>" required>
                 </div>
+                <!-- Current Product Image -->
+                <% if (product.picture) { %>
+                    <div class="mb-3">
+                        <label class="form-label">Current Image:</label>
+                        <img src="<%= product.image %>" alt="Product Image" width="100" />
+                    </div>
+                <% } %>
                 <!-- Product Images -->
                 <div class="mb-4">
                     <label for="image" class="form-label">Image</label>
-                    <input type="file" id="image" name="image" class="form-control" accept="image/*" required>
+                    <input type="file" id="image" name="image" class="form-control" accept="image/*">
                 </div>
                 <!-- Description -->
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3"><%= product.description %></textarea>
                 </div>
                 <!-- Availability -->
                 <div class="mb-3">
@@ -37,20 +43,19 @@
                     <label for="category" class="form-label">Category</label>
                     <select id="category" name="category" class="form-control" required>
                         <option value="">Select a category</option>
-                        <option value="men">Men Clothing</option>
-                        <option value="women">Women Clothing</option>
-                        <option value="accessories">Accessories</option>
-                        <option value="footwear">Footwear</option>
-                        <option value="vintage">Vintage Pieces</option>
+                        <option value="men" >Men Clothing</option>
+                        <option value="women" >Women Clothing</option>
+                        <option value="accessories" >Accessories</option>
+                        <option value="footwear" >Footwear</option>
+                        <option value="vintage" >Vintage Pieces</option>
                     </select>
                 </div>
-                 <!-- Seller Name Dropdown -->
-                 <div class="mb-3">
+                <!-- Seller Name -->
+                <div class="mb-3">
                     <label for="seller" class="form-label">Seller Name</label>
                     <input type="text" id="seller" name="seller" class="form-control" value="<%= seller %>" readonly>
                 </div>
-              
-                <button type="submit" class="btn btn-primary w-100">Add Product</button>
+                <button type="submit" class="btn btn-primary w-100">Update Product</button>
             </form>
         </div>
     </div>
