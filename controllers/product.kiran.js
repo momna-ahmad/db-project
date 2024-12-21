@@ -161,14 +161,29 @@ router.get('/search', async (req, res) => {
         { description: { $regex: searchQuery, $options: 'i' } }
       ]
     });
+   
+    let page = req.params.page;
+    page = page ? Number(page) : 1;
+    let pageSize = 6;
+    let totalRecords =  products.length;
+    let totalPages = Math.ceil(totalRecords / pageSize);
+    // return res.send({ page });
+
+        
 
     // Handle cases with no products
     if (products.length === 0) {
-      return res.render('partials/productList', { products: [], category: searchQuery , message: 'No products found.' });
+      return res.render('partials/productList', { products: [], layout: 'basiclayout' , category: searchQuery , message: 'No products found.' ,page,
+        pageSize,
+        totalPages,
+        totalRecords,});
     }
 
     // Render search products page
-    res.render('partials/productList', { products,category: searchQuery , message: null });
+    res.render('partials/productList', { products,category: searchQuery , layout: 'basiclayout' , message: null,page,
+      pageSize,
+      totalPages,
+      totalRecords, });
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred while performing the search.');

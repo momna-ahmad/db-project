@@ -97,19 +97,17 @@ router.get("/add-to-cart/:id", async (req, res) => {
     (item) => item.id.toString() === req.params.id
   );
 
-  if (productIndex !== -1) {
-    // If the product is already in the cart, increase the quantity
-    cart[productIndex].quantity = Number(cart[productIndex].quantity) + 1;
-  } else {
-    // If the product is not in the cart, add it with a quantity of 1
-    cart.push({
-      id: req.params.id, // Store only the ID and quantity
-      quantity: 1,
-    });
+  if(req.cookies.cart.includes(req.params.id)){
+    //flash mesage should be displayed that product is already added to cart
+  }
+  else
+  {
+    cart.push(req.params.id) ;
+    // Save the updated cart in the cookie
+    res.cookie("cart", cart);
   }
 
-  // Save the updated cart in the cookie
-  res.cookie("cart", cart);
+  
 
   // Flash success message
   req.flash("messages", "Product added to your cart!");
