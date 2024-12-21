@@ -28,6 +28,7 @@ router.use((req, res, next) => {
 router.get("/cart", async (req, res) => {
   let cart = req.cookies.cart;
   cart = cart ? cart : [];
+  console.log(cart) ;
 
   let productIds = cart.map((item) => item.id); // Extract product IDs from the cart
   let products = await Product.find({ _id: { $in: productIds } });
@@ -58,46 +59,12 @@ router.get("/cart", async (req, res) => {
   });
 });
 
-// Update cart quantity route
-router.post("/update-quantity/:id", (req, res) => {
-  let cart = req.cookies.cart;
-  cart = cart ? cart : [];
-
-  // Find the product in the cart
-  let productIndex = cart.findIndex(
-    (item) => item.id.toString() === req.params.id
-  );
-
-  if (productIndex !== -1) {
-    // Check if req.body.quantity is a string or number
-    let quantityFromBody = req.body.quantity;
-    let newQuantity =
-      typeof quantityFromBody === "string"
-        ? parseInt(quantityFromBody, 10)
-        : quantityFromBody; // If it's already a number, use it directly
-
-    // If it's a valid number and greater than 0, update the quantity
-    cart[productIndex].quantity = newQuantity > 0 ? newQuantity : 1;
-  }
-
-  // Save the updated cart in the cookie
-  res.cookie("cart", cart);
-
-  // Redirect back to the cart page with a flash message
-  req.flash("messages", "Cart updated successfully!");
-  return res.redirect("/cart");
-});
 
 // Add to cart route
 router.get("/add-to-cart/:id", async (req, res) => {
   let cart = req.cookies.cart || []; // Default to empty array if cart is not set
 
-  // Check if the product is already in the cart
-  let productIndex = cart.findIndex(
-    (item) => item.id.toString() === req.params.id
-  );
-
-  if(req.cookies.cart.includes(req.params.id)){
+  if(cart.includes(req.params.id)){
     //flash mesage should be displayed that product is already added to cart
   }
   else
@@ -112,8 +79,8 @@ router.get("/add-to-cart/:id", async (req, res) => {
   // Flash success message
   req.flash("messages", "Product added to your cart!");
 
-  // Redirect back to the home page
-  return res.redirect("/readProfile");
+  const redirectUrl = req.get('Referer') || '/'; // Fallback to the home page if no referer is found
+  res.redirect(redirectUrl);
 });
 
 router.post("/remove-product/:productId", (req, res) => {

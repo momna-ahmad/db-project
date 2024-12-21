@@ -37,22 +37,26 @@
 </head>
 <body>
 
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
       <!-- Logo Section -->
       <a class="navbar-brand" href="/">
         <img src="/images/vintage-logo.png" alt="Vintage Logo">
       </a>
-
+  
       <!-- Navbar Toggler for mobile -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
+  
       <!-- Navbar links -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
+          <!-- Home Button -->
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+  
           <!-- Search bar -->
           <li class="nav-item">
             <form class="d-flex" action="/search" method="GET">
@@ -60,7 +64,7 @@
               <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
           </li>
-
+  
           <!-- Cart Icon -->
           <li class="nav-item">
             <a class="nav-link" href="/cart">
@@ -71,7 +75,7 @@
       </div>
     </div>
   </nav>
-
+  
   <!-- Main content section -->
   <div class="container mt-4">
     <%- body %> <!-- This will render the dynamic content from your view -->
