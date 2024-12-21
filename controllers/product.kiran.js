@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 let Product = require("../models/product.model");
 let User = require("../models/user.model");
-const { v2: cloudinary } = require("cloudinary");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
+const cloudinary = require('cloudinary').v2; // Ensure you're using `v2`
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
 
 // Configure Cloudinary
 cloudinary.config({
@@ -31,12 +32,17 @@ router.get('/admin/add-product/:userId', async (req, res) => {
     res.render('admin/addProduct', {
        layout: "profileForm",
        seller:user.name, 
+       userId:userId,
     });
 });
 
+console.log(upload);
+
+
 router.post('/admin/products/create', upload.single('image'), async (req, res) => {
   try {
-      const { name, description, price, category, seller, isAvailable } = req.body;
+      console.log(req.file);
+      const { name, description, price, category, seller, isAvailable,userId } = req.body;
 
       // Validate required fields
       if (!name || !price || !category || !seller) {
@@ -48,20 +54,25 @@ router.post('/admin/products/create', upload.single('image'), async (req, res) =
           return res.status(400).send('Image upload failed.');
       }
 
+      // Find the seller by name (or username) to get their ObjectId
+      const user = await User.findOne({ name: seller }); // Assuming seller's name is passed
+      if (!user) {
+          return res.status(400).send("Seller not found.");
+      }
+
       // Prepare the picture object
       const picture = {
         name: file.originalname,
-        imgUrl: file.path,  // This should be file.url instead of file.path for Cloudinary
-    };
-    
+        imgUrl: file.url,  // This should be file.url instead of file.path for Cloudinary
+      };
 
-      // Create the product
+      // Create the product with the seller's ObjectId
       const newProduct = new Product({
           name,
           description,
           price,
           category,
-          seller,
+          seller: userId, // Use the ObjectId of the user
           isAvailable,
           picture,
       });
@@ -72,7 +83,7 @@ router.post('/admin/products/create', upload.single('image'), async (req, res) =
       console.error("Error creating product:", error.message);
       res.status(500).send("Internal Server Error");
   }
-});  
+});
   router.get("/admin/deleteProduct/:id", async(req, res) => {
     try{
       let product = await Product.findByIdAndDelete(req.params.id);

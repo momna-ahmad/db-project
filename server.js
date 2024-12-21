@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require('multer') ;
 
-const { v2: cloudinary } = require('cloudinary');
+const cloudinary = require('cloudinary').v2; // Ensure you're using `v2`
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const ejsLayouts = require("express-ejs-layouts"); 
 let server = express();
@@ -48,6 +48,8 @@ cloudinary.config({
   api_key: "845284654399189",
   api_secret: "XVgZm8ajlHu6SxIBUd7K94A-2yc",
 });
+
+console.log(cloudinary.config());
 
 
 // Multer Cloudinary storage setup
