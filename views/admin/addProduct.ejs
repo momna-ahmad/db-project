@@ -49,8 +49,8 @@
                     <label for="seller" class="form-label">Seller Name</label>
                     <select id="seller" name="sellerId" class="form-control" required>
                         <option value="">Select a seller</option>
-                        <% for (let i = 0; i < users.length; i++) { %>
-                            <option value="<%= users[i]._id %>"><%= users[i].name %></option>
+                        <% for (let i = 0; i < user.length; i++) { %>
+                            <option value="<%= user[i]._id %>"><%= user[i].name %></option>
                         <% } %>
                     </select>
                 </div>
