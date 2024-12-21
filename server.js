@@ -4,27 +4,13 @@ const multer = require('multer') ;
 
 const { v2: cloudinary } = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
-let Product = require("./models/product.model");
-let user = require("./models/user.model");
-let order = require("./models/order.model");
-let cart = require("./models/shoppingCart.model");
 const ejsLayouts = require("express-ejs-layouts"); 
-
-
 let server = express();
 
 
 server.set("view engine", "ejs");
 server.use(ejsLayouts);
 // importing controller which render pages on base of category of products
-
-const productController = require('./controllers/product.kiran');
-const cartController = require('./controllers/cart.kiran');
-server.use(productController);
-server.use(cartController);
-
-
 
 //expose public folder for publically accessible static files
 server.use(express.static("public"));
@@ -33,6 +19,23 @@ server.use(express.static("public"));
 
 // add support for fetching data from request body
 server.use(express.urlencoded({extended : true} ));
+
+
+const productController = require('./controllers/product.kiran');
+const checkoutController = require('./controllers/checkout.controller');
+const cartController = require('./controllers/cart.kiran');
+server.use(productController);
+server.use(cartController);
+server.use(checkoutController);
+
+
+let Product = require("./models/product.model");
+let user = require("./models/user.model");
+let order = require("./models/order.model");
+let cart = require("./models/shoppingCart.model");
+
+
+
 
 
 // Set up storage for multer
@@ -187,37 +190,7 @@ server.get('/deleteProfile/:id', async (req, res) => {
 
 
 
-// Delete Product
 
-
-
-//addproduct
-
-
-// add Product
-
-
-
-
-//route to delete a product 
-
-
-//route for updation of product
-
-//kiran Part end
-//shafqaat end
-
-
-
-
-
-const checkoutController = require('./controllers/checkout.controller');
-
-//Route to render the checkout page
-router.get('/checkout', checkout.controller.renderCheckoutPage);
-
-// Route to handle checkout form submission
-router.post('/checkout', checkout.controller.processCheckout);
 
 server.listen(5000, () => {
   console.log(`Server Started at localhost:5000`);

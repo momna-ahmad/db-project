@@ -1,63 +1,66 @@
 const express = require('express');
-const mongoose = require("mongoose");
 const orderModel = require("../models/order.model");
 
-app.get('/checkout', (req, res) => {
-    res.render('checkout', {
-      error: null, // Pass null by default for error
-      cart: req.session.cart || [], // Optional: Pass cart details if stored in session
-      totalAmount: req.session.totalAmount || 0, // Optional: Pass total amount
+const router = express.Router();
+
+// Render checkout page
+router.get('/checkout', (req, res) => {
+    res.render('checkoutForm', {
+        error: null, // No error by default
+        cart: req.session.cart || [], // Retrieve cart details from session
+        totalAmount: req.session.totalAmount || 0, // Retrieve total amount from session
     });
-  });
-  
-  // Handle checkout form submission
-  app.post('/checkout', async (req, res) => {
+});
+
+// Handle checkout form submission
+router.post('/checkout', async (req, res) => {
     const { country, city, address, payment } = req.body;
-    
-    // Assuming you have a logged-in user
-    const buyer = req.user?._id; // Replace with actual logic to retrieve logged-in user ID
-    
-    // Basic validation
+
+    // Assuming a logged-in user is available
+    const buyer = req.user?._id; // Replace with actual logic to retrieve user ID
+
+    // Validation
     if (!buyer || !country || !city || !address || !payment) {
-      return res.status(400).render('checkout', {
-        error: 'All fields are required.',
-        cart: req.session.cart || [],
-        totalAmount: req.session.totalAmount || 0,
-      });
+        return res.status(400).render('checkoutForm', {
+            error: 'All fields are required.',
+            cart: req.session.cart || [],
+            totalAmount: req.session.totalAmount || 0,
+        });
     }
-  
+
     try {
-      // Create order object
-      const orderData = {
-        buyer,
-        products: req.session.cart.map(item => ({
-          product: item.productId,
-        })),
-        totalAmount: req.session.totalAmount,
-        location: {
-          country,
-          city,
-          address,
-        },
-      };
-  
-      // Save the order to the database
-      const Order = require('./models/order'); // Ensure the correct path
-      const newOrder = new Order(orderData);
-      await newOrder.save();
-  
-      // Clear the session/cart after successful order
-      req.session.cart = [];
-      req.session.totalAmount = 0;
-  
-      // Render success page
-      res.render('success', { name: req.user?.name || 'Customer' });
+        // Prepare order data
+        const orderData = {
+            buyer,
+            products: req.session.cart.map(item => ({
+                product: item.productId,
+            })),
+            totalAmount: req.session.totalAmount,
+            location: {
+                country,
+                city,
+                address,
+            },
+        };
+
+        // Save order to database
+        const newOrder = new orderModel(orderData);
+        await newOrder.save();
+
+        // Clear session/cart after successful order
+        req.session.cart = [];
+        req.session.totalAmount = 0;
+
+        // Render success page
+        res.render('success', { name: req.user?.name || 'Customer' });
     } catch (error) {
-      console.error('Error creating order:', error);
-      res.status(500).render('checkout', {
-        error: 'An error occurred while processing your order. Please try again.',
-        cart: req.session.cart || [],
-        totalAmount: req.session.totalAmount || 0,
-      });
+        console.error('Error creating order:', error);
+        res.status(500).render('checkoutForm', {
+            error: 'An error occurred while processing your order. Please try again.',
+            cart: req.session.cart || [],
+            totalAmount: req.session.totalAmount || 0,
+        });
     }
-  });
+});
+
+module.exports = router;

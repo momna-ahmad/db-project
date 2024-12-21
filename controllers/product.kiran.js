@@ -138,5 +138,34 @@ router.post('/admin/products/create',upload.single('image'),async (req, res) => 
       res.status(500).send("Error updating product.");
     }
   });
+
+  // Search route
+router.get('/search', async (req, res) => {
+  const searchQuery = req.query.query; // Get search query from URL parameters
+
+  try {
+    // Perform case-insensitive search on name, category, and description
+    const products = await Product.find({
+      $or: [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { category: { $regex: searchQuery, $options: 'i' } },
+        { description: { $regex: searchQuery, $options: 'i' } }
+      ]
+    });
+
+    // Handle cases with no products
+    if (products.length === 0) {
+      return res.render('partials/productList', { products: [], category: searchQuery , message: 'No products found.' });
+    }
+
+    // Render search products page
+    res.render('partials/productList', { products,category: searchQuery , message: null });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while performing the search.');
+  }
+});
+
+  module.exports = router ;
   
   
