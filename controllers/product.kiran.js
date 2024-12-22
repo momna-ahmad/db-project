@@ -41,19 +41,20 @@ console.log(upload);
 router.post('/admin/products/create', upload.single('image'), async (req, res) => {
   try {
       const { name, description, price, category } = req.body;
+      console.log(name);
+      console.log(description);
+      console.log(price);
+      console.log(category);
 
       // Ensure the required fields are provided
-      if (!name || !price || !category) {
+      if (!name || !price || !category||!description) {
           return res.status(400).send("All required fields must be filled.");
       }
 
-      // Check if the session user is available
-      if (!req.session.user || !req.session.user._id) {
-          return res.status(403).send("Unauthorized: User session not found.");
-      }
+      
 
       const sellerId = req.session.user._id;
-
+      console.log("User is :",sellerId);
       const file = req.file;
       if (!file) {
           return res.status(400).send('Image upload failed.');
