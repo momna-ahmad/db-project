@@ -28,7 +28,7 @@ let totalPages = Math.ceil(totalRecords / pageSize);
 let products = await Product.find({category : Category}).sort(sortOrder)
   .limit(pageSize)
   .skip((page - 1) * pageSize);
-    
+    console.log(products) ;
     // Check if products were found
     if (products.length > 0) {
       // Render a page to display the products or send the products as JSON
@@ -47,7 +47,12 @@ let products = await Product.find({category : Category}).sort(sortOrder)
 
 });
  
+//display details of a product
 
+router.get('/details/:id' , async(req,res)=>{
+  let product = await Product.findById(req.params.id);
+  return res.render('partials/productdetails' , { layout : 'basiclayout' , product}) ; 
+})
 
 
 module.exports= router ;
