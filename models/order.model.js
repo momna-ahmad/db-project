@@ -7,21 +7,20 @@ let orderSchema = mongoose.Schema({
         ref: 'User',
         required: true,
       },
-      products: [{
-        product: {
+      product: {
+        
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Product',
-        }
-      }],
+      },
       totalAmount: {
         type: Number,
         required: true,
       },
-      //status: {
-      //  type: String,
-      //  enum: ['pending', 'shipped', 'delivered', 'cancelled'],
-      //  default: 'pending',
-      //},
+      status: {
+        type: String,
+        enum: ['pending', 'shipped', 'delivered', 'cancelled'],
+        default: 'pending',
+      },
       orderDate: {
         type: Date,
         default: Date.now,
