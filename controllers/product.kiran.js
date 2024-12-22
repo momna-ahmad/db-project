@@ -26,66 +26,66 @@ const storage = new CloudinaryStorage({
 
 // Use multer with Cloudinary storage
 const upload = multer({ storage: storage });
-router.get('/admin/add-product/:userId', async (req, res) => {
-  console.log(req.session.user._id) ;
-  const userId = req.params.userId; // Get the userId from the route parameter
-  const user = await User.findById(userId);
+router.get('/admin/add-product', async (req, res) => {
+ 
     res.render('admin/addProduct', {
        layout: "profileForm",
-       seller:user.name, 
-       userId:userId,
+     
     });
 });
 
 console.log(upload);
 
 
+
 router.post('/admin/products/create', upload.single('image'), async (req, res) => {
   try {
-      console.log(req.file);
-      const { name, description, price, category, seller, isAvailable,userId } = req.body;
+      const { name, description, price, category } = req.body;
+      console.log(name);
+      console.log(description);
+      console.log(price);
+      console.log(category);
 
-      // Validate required fields
-      if (!name || !price || !category || !seller) {
+      // Ensure the required fields are provided
+      if (!name || !price || !category||!description) {
           return res.status(400).send("All required fields must be filled.");
       }
 
-      const file = req.file; // Uploaded file
+      
+
+      const sellerId = req.session.user._id;
+      console.log("User is :",sellerId);
+      const file = req.file;
       if (!file) {
           return res.status(400).send('Image upload failed.');
       }
 
-      // Find the seller by name (or username) to get their ObjectId
-      const user = await User.findOne({ name: seller }); // Assuming seller's name is passed
-      if (!user) {
-          return res.status(400).send("Seller not found.");
-      }
-
-      // Prepare the picture object
       const picture = {
-        name: file.originalname,
-        imgUrl: file.url,  // This should be file.url instead of file.path for Cloudinary
+          name: file.originalname,
+          imgUrl: file.path,
       };
 
-      // Create the product with the seller's ObjectId
+      // Create and save the product
       const newProduct = new Product({
           name,
           description,
           price,
           category,
-          seller: userId, // Use the ObjectId of the user
-          isAvailable,
+          seller: sellerId,
+          isAvailable: true,
           picture,
       });
 
-      await newProduct.save(); // Save to database
-      res.redirect('/readProfile'); // Adjust redirect route as needed
+      await newProduct.save();
+
+      console.log("Product added successfully:", newProduct);
+      res.redirect('/readProfile');
   } catch (error) {
       console.error("Error creating product:", error.message);
       res.status(500).send("Internal Server Error");
   }
 });
-  router.get("/admin/deleteProduct/:id", async(req, res) => {
+router.get("/admin/deleteProduct/:id", async(req, res) => {
     try{
       let product = await Product.findByIdAndDelete(req.params.id);
       if (!product) {

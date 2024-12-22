@@ -3,7 +3,6 @@
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Add Product</h2>
             <form action="/admin/products/create" method="POST" enctype="multipart/form-data">
-               
                 <!-- Product Name -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Product Name</label>
@@ -24,14 +23,6 @@
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                 </div>
-                <!-- Availability -->
-                <div class="mb-3">
-                    <label for="isAvailable" class="form-label">Is Available</label>
-                    <select class="form-control" id="isAvailable" name="isAvailable">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </div>
                 <!-- Category -->
                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
@@ -44,12 +35,7 @@
                         <option value="vintage">Vintage Pieces</option>
                     </select>
                 </div>
-                 <!-- Seller Name Dropdown -->
-                 <div class="mb-3">
-                    <label for="seller" class="form-label">Seller Name</label>
-                    <input type="text" id="seller" name="seller" class="form-control" value="<%= seller %>" readonly>
-                </div>
-                <input type="hidden" name="userId" value="<%= userId %>">
+            
                 <button type="submit" class="btn btn-primary w-100">Add Product</button>
             </form>
         </div>
