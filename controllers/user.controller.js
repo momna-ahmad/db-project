@@ -6,7 +6,7 @@ let User = require("../models/user.model");
 
 const bcrypt = require('bcryptjs');
 
-const ProductModel = require("../models/product.model");
+const Product = require("../models/product.model");
 
 
 
@@ -92,8 +92,8 @@ router.get('/readProfile', async (req, res) => {
     try {
      
         let user = new User(req.session.user) ;
-        let products = await User.findById(req.session.user._id).populate('product') ;
-      
+        const products = await Product.find({ seller: req.session.user._id });
+      console.log(products) ;
   
       return res.render("readProfile", { 
         layout: 'profilelayout', 
