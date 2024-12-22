@@ -174,12 +174,44 @@ router.get('/products/:category/:page?', async (req,res)=>{
     let page = req.params.page;
 page = page ? Number(page) : 1;
 let pageSize = 6;
-let totalRecords = await Product.countDocuments();
+const totalRecords = await Product.countDocuments({ category: Category });
 let totalPages = Math.ceil(totalRecords / pageSize);
 // return res.send({ page });
 let products = await Product.find({category : Category})
   .limit(pageSize)
   .skip((page - 1) * pageSize);
+    
+    // Check if products were found
+    if (products.length > 0) {
+      // Render a page to display the products or send the products as JSON
+      return res.render('./partials/productList', { products , layout : "basiclayout" , Category,page,
+        pageSize,
+        totalPages,
+        totalRecords, } );
+    } else {
+      // If no products are found, return a message or render an empty product list
+      return res.render('./partials/noproductsfound',  { message: 'No products found in this category.' , Category, layout : "basiclayout"});
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return res.status(500).send("An error occurred while fetching products.");
+  }
+
+});
+
+router.get("products/:category/sort-hightolow/:page?", async (req,res)=>{
+  try {
+    let Category = req.params.category ;
+    // Find products where category is 'men'
+    let page = req.params.page;
+page = page ? Number(page) : 1;
+let pageSize = 6;
+const totalRecords = await Product.countDocuments({ category: Category });
+let totalPages = Math.ceil(totalRecords / pageSize);
+// return res.send({ page });
+let products = await Product.find({category : Category})
+  .limit(pageSize)
+  .skip((page - 1) * pageSize).sort({ price : 1 });
     
     // Check if products were found
     if (products.length > 0) {

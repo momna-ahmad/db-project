@@ -33,7 +33,7 @@ router.get("/cart", async (req, res) => {
 
   // Calculate total amount
   let totalAmount = products.reduce((sum, product) => sum + product.price, 0);
-
+  
   res.render("cart", {
     products,
     totalAmount,

@@ -1,7 +1,7 @@
 const express = require("express");
 const orderModel = require("../models/order.model");
 const userModel = require("../models/user.model");
-const productModel = require("../models/product.model");
+const Product = require("../models/product.model");
 
 
 const router = express.Router();
@@ -9,12 +9,13 @@ const router = express.Router();
 // Render checkout page
 router.get("/checkout", async (req, res) => {
     try {
-        const user = req.user; 
+        const user = req.session.user; 
         if (!user) return res.redirect("/login");
 
         // Fetch user's cart
-        const cart = await shoppingCartModel.findById(user.cart).populate("items");
-        if (!cart || cart.items.length === 0) {
+        const cart = req.cookies.cart ;
+        console.log(cart) ;
+        if (!cart || cart.length === 0) {
             return res.status(400).render("checkoutForm", {
                 error: "Your cart is empty.",
                 cart: [],
@@ -22,12 +23,16 @@ router.get("/checkout", async (req, res) => {
             });
         }
 
+        let products = await Product.find({ _id: { $in: cart } });
+        console.log(products) ;
         // Calculate total amount
-        const totalAmount = cart.items.reduce((sum, item) => sum + item.price, 0);
-
-        res.render("checkoutForm", {
+        let totalAmount = products.reduce((sum, product) => sum + product.price, 0);
+        
+        return res.render("checkoutForm", {
+            layout : 'profilelayout' ,
             error: null,
-            cart: cart.items,
+            cart,
+            products,
             totalAmount,
         });
     } catch (error) {
@@ -41,7 +46,7 @@ router.post("/checkout", async (req, res) => {
     const { country, city, address, payment } = req.body;
 
     try {
-        const user = req.user; // Assuming user is stored in the session
+        const user = req.session.user; // Assuming user is stored in the session
         if (!user) return res.redirect("/login");
 
         // Fetch user's cart
