@@ -27,7 +27,7 @@ const storage = new CloudinaryStorage({
 // Use multer with Cloudinary storage
 const upload = multer({ storage: storage });
 router.get('/admin/add-product', async (req, res) => {
- 
+  console.log(req.session.user._id) ;
     res.render('admin/addProduct', {
        layout: "profileForm",
      
@@ -54,7 +54,7 @@ router.post('/admin/products/create', upload.single('image'), async (req, res) =
       
 
       const sellerId = req.session.user._id;
-      console.log("User is :",sellerId);
+      console.log("User is :" + sellerId);
       const file = req.file;
       if (!file) {
           return res.status(400).send('Image upload failed.');
@@ -86,6 +86,7 @@ router.post('/admin/products/create', upload.single('image'), async (req, res) =
   }
 });
 router.get("/admin/deleteProduct/:id", async(req, res) => {
+  console.log(req.session.user._id) ;
     try{
       let product = await Product.findByIdAndDelete(req.params.id);
       if (!product) {

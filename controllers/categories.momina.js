@@ -184,13 +184,13 @@ let products = await Product.find({category : Category})
     // Check if products were found
     if (products.length > 0) {
       // Render a page to display the products or send the products as JSON
-      return res.render('./partials/productList', { products , layout : "basiclayout" , category : 'footwear',page,
+      return res.render('./partials/productList', { products , layout : "basiclayout" , Category,page,
         pageSize,
         totalPages,
         totalRecords, } );
     } else {
       // If no products are found, return a message or render an empty product list
-      return res.render('./partials/noproductsfound',  { message: 'No products found in this category.' , layout : "basiclayout"});
+      return res.render('./partials/noproductsfound',  { message: 'No products found in this category.' , Category, layout : "basiclayout"});
     }
   } catch (error) {
     console.error("Error fetching products:", error);
