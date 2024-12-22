@@ -2,42 +2,51 @@
   Page <%= page %> of <%= totalPages %>
 </div>
 <nav aria-label="Page navigation example">
- <ul class="pagination">
-     <li class="page-item <%= page==1? "disabled":"" %>"><a class="page-link" href="/products/<%= Category %>/<%= Number(page)-1 %>">Previous</a></li>
-     <% for( let index = 1; index <= totalPages; index++ ) { %>
-     <li class="page-item"><a class="page-link" href="/products/<%= Category %>/<%= index %>"><%= index %></a></li>
-   <% } %>
-
-   <li class="page-item <%= page==totalPages?"disabled":"" %> "><a class="page-link" href="/products/<%= Category %>/<%= Number(page)+1 %>">Next</a></li>
- </ul>
+  <ul class="pagination">
+    <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
+      <a class="page-link" href="/products/<%= Category %>/<%= sort %>/<%= Number(page) - 1 %>">Previous</a>
+    </li>
+    <% for (let index = 1; index <= totalPages; index++) { %>
+    <li class="page-item <%= page == index ? 'active' : '' %>">
+      <a class="page-link" href="/products/<%= Category %>/<%= sort %>/<%= index %>"><%= index %></a>
+    </li>
+    <% } %>
+    <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
+      <a class="page-link" href="/products/<%= Category %>/<%= sort %>/<%= Number(page) + 1 %>">Next</a>
+    </li>
+  </ul>
 </nav>
 
-
 <div class="container mt-5">
-    <!-- Sort Button with Bootstrap Dropdown -->
-    <div class="dropdown float-end">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="sortButton" data-bs-toggle="dropdown" aria-expanded="false">
-        Sort
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="sortButton">
-        <li><a class="dropdown-item" href="/products/:category/sort-hightolow">High to Low</a></li>
-        <li><a class="dropdown-item" href="/products/:category/sort-lowtohigh">Low to High</a></li>
-      </ul>
-    </div>
-  
-    <!-- Product List -->
-    <div class="product row mt-4">
-      <% products.forEach(function(product) { %>
-        <div class="product-card col-md-4 col-sm-6 col-12">
-          <img src="/<%= product.picture %>" alt="<%= product.title %>" class="product-image">
-          <div class="product-info">
-            <h3 class="product-title"><%= product.name %></h3>
-            <p class="product-price">$<%= product.price.toFixed(2) %></p>
+  <!-- Sort Button with Bootstrap Dropdown -->
+  <div class="dropdown float-end">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="sortButton" data-bs-toggle="dropdown" aria-expanded="false">
+      Sort
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="sortButton">
+      <li><a class="dropdown-item" href="/products/<%= Category %>/sort-hightolow/<%= page %>">High to Low</a></li>
+      <li><a class="dropdown-item" href="/products/<%= Category %>/sort-lowtohigh/<%= page %>">Low to High</a></li>
+    </ul>
+  </div>
+
+  <!-- Product List -->
+  <div class="row mt-4">
+    <% products.forEach(function(product) { %>
+    <div class="col-md-4 col-sm-6 col-12 mb-4">
+      <!-- Wrap the entire product card with an anchor tag for the product details route -->
+      <a href="/details/<%= product._id %>" class="text-decoration-none">
+        <div class="card">
+          <img src="/<%= product.picture.imgUrl %>" alt="<%= product.name %>" class="card-img-top" style="height: 250px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title"><%= product.name %></h5>
+            <p class="card-text">$<%= product.price.toFixed(2) %></p>
             <a href="/add-to-cart/<%= product._id %>" class="btn btn-primary">
               Add to Cart
             </a>
           </div>
+        </div>
+      </a>
     </div>
-      <% }); %>
+    <% }); %>
+  </div>
 </div>
-  
