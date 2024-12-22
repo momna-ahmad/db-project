@@ -1,69 +1,102 @@
-const express = require('express');
+const express = require("express");
 const orderModel = require("../models/order.model");
+const userModel = require("../models/user.model");
+const productModel = require("../models/product.model");
+
 
 const router = express.Router();
 
 // Render checkout page
-router.get('/checkout', (req, res) => {
-    res.render('checkoutForm', {
-        error: null, // No error by default
-        cart: req.session.cart || [], // Retrieve cart details from session
-        totalAmount: req.session.totalAmount || 0, // Retrieve total amount from session
-    });
+router.get("/checkout", async (req, res) => {
+    try {
+        const user = req.user; 
+        if (!user) return res.redirect("/login");
+
+        // Fetch user's cart
+        const cart = await shoppingCartModel.findById(user.cart).populate("items");
+        if (!cart || cart.items.length === 0) {
+            return res.status(400).render("checkoutForm", {
+                error: "Your cart is empty.",
+                cart: [],
+                totalAmount: 0,
+            });
+        }
+
+        // Calculate total amount
+        const totalAmount = cart.items.reduce((sum, item) => sum + item.price, 0);
+
+        res.render("checkoutForm", {
+            error: null,
+            cart: cart.items,
+            totalAmount,
+        });
+    } catch (error) {
+        console.error("Error loading checkout page:", error);
+        res.status(500).send("Server error");
+    }
 });
 
 // Handle checkout form submission
-router.post('/checkout', async (req, res) => {
+router.post("/checkout", async (req, res) => {
     const { country, city, address, payment } = req.body;
 
-    // Assuming a logged-in user is available
-    const buyer = req.user?._id; // Replace with actual logic to retrieve user ID
-
-    // Validation
-    if (!buyer || !country || !city || !address || !payment) {
-        return res.status(400).render('checkoutForm', {
-            error: 'All fields are required.',
-            cart: req.session.cart || [],
-            totalAmount: req.session.totalAmount || 0,
-        });
-    }
-
     try {
-        // Prepare order data
-        const orderData = {
-            buyer,
-            products: req.session.cart.map(item => ({
-                product: item.productId,
-            })),
-            totalAmount: req.session.totalAmount,
-            location: {
-                country,
-                city,
-                address,
-            },
-        };
+        const user = req.user; // Assuming user is stored in the session
+        if (!user) return res.redirect("/login");
 
-        // Save order to database
-        const newOrder = new orderModel(orderData);
-        await newOrder.save();
+        // Fetch user's cart
+        const cart = await shoppingCartModel.findById(user.cart).populate("items");
+        if (!cart || cart.items.length === 0) {
+            return res.status(400).render("checkoutForm", {
+                error: "Your cart is empty.",
+                cart: [],
+                totalAmount: 0,
+            });
+        }
 
-        // Clear session/cart after successful order
-        req.session.cart = [];
-        req.session.totalAmount = 0;
+        // Create orders for each product in the cart
+        const orders = [];
+        for (const product of cart.items) {
+            // Fetch seller of the product
+            const seller = await userModel.findOne({ product: product._id });
+            if (!seller) {
+                console.warn('Seller not found for product: ${product._id}');
+                continue;
+            }
 
-        // Render success page
-        res.render('success', { name: req.user?.name || 'Customer' });
+            // Create order object
+            const order = new orderModel({
+                buyer: user._id,
+                products: [{ product: product._id }],
+                totalAmount: product.price, // Single product price
+                location: {
+                    country,
+                    city,
+                    address,
+                },
+                orderDate: new Date(),
+            });
+
+            await order.save();
+            orders.push(order);
+        }
+
+        // Clear user's cart
+        cart.items = [];
+        await cart.save();
+
+        res.render("success", {
+            name: user.name || "Customer",
+            orders,
+        });
     } catch (error) {
-        console.error('Error creating order:', error);
-        res.status(500).render('checkoutForm', {
-            error: 'An error occurred while processing your order. Please try again.',
+        console.error("Error processing order:", error);
+        res.status(500).render("checkoutForm", {
+            error: "An error occurred while processing your order. Please try again.",
             cart: req.session.cart || [],
             totalAmount: req.session.totalAmount || 0,
         });
     }
 });
-
-
-
 
 module.exports = router;

@@ -25,13 +25,12 @@ body {
     justify-content: center;
     position: relative;
     text-align: center;
-    color: white;
 }
 
 .hero-section .hero-content {
-    /*background: rgba(0, 0, 0, 0); Semi-transparent background for better text visibility */
     padding: 20px;
     border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5); /* Enhanced background visibility */
 }
 
 .hero-section h1 {
@@ -52,18 +51,38 @@ body {
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 300px; /* Fixed height for category boxes */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
-.category-box img {
+.category-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.category-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the div without distorting */
     border-radius: 10px;
+    display: block;
+}
+
+.category-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit text color from parent */
 }
 
 .category-box h5 {
     margin-top: 10px;
-    font-weight: bold;
+    font-weight: normal;
     color: #6c5c45;
+    font-size: 1.25rem;
 }
 
 /* Footer Styling */
@@ -73,3 +92,5 @@ body {
     text-align: center;
     padding: 15px;
 }
+
+
