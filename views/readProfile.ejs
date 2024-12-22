@@ -22,13 +22,15 @@
                         <div class="card product-card">
                             <img src="<%= product.picture.imgUrl %>" class="card-img-top" alt="Product">
                             <div class="card-body text-center">
-                                <h2><%= product.name %></h2>
+                                <h4><%= product.name %></h4>
+                                <!-- Product Description -->
+                                <h5><%= product.description %></h5>
                                 <div class="prod-price">
                                     <h5 class="card-title"><%= product.price %></h5>
-                                    <span class="product-status in-stock"><%= product.status %></span>
+                                    
                                 </div>
                                 <div>
-                                    <a href="/admin/editProduct/<%= product._id %>" class="btn btn-primary btn-sm" style="width:100px;">Edit</a>
+                                    <a href="/admin/editProduct/<%= product._id %>" class="btn btn-warning btn-sm" style="width:100px;">Edit</a>
                                     <a href="/admin/deleteProduct/<%= product._id %>" class="btn btn-danger btn-sm" style="width:100px;">Delete</a>
                                 </div> 
                             </div>
@@ -42,6 +44,7 @@
             <% } %>
         </div>
     <% } %>
+    
 </div>
 
 <!-- Bootstrap JS and Icons -->
