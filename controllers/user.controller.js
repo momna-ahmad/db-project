@@ -93,7 +93,6 @@ router.get('/readProfile', async (req, res) => {
      
         let user = new User(req.session.user) ;
         const products = await Product.find({ seller: req.session.user._id });
-      console.log(products) ;
   
       return res.render("readProfile", { 
         layout: 'profilelayout', 
