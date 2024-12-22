@@ -5,8 +5,10 @@ const multer = require('multer') ;
 const { v2: cloudinary } = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const ejsLayouts = require("express-ejs-layouts"); 
-let server = express();
+const session = require('express-session');
+const cookieParser = require("cookie-parser"); 
 
+let server = express();
 
 server.set("view engine", "ejs");
 server.use(ejsLayouts);
@@ -20,16 +22,23 @@ server.use(express.static("public"));
 // add support for fetching data from request body
 server.use(express.urlencoded({extended : true} ));
 
+server.use(cookieParser());
+server.use(session({
+    secret: 'keyboard cat',
+    }));
 
+
+const userController = require('./controllers/user.controller') ;
+server.use(userController) ;
 const productController = require('./controllers/product.kiran');
 const checkoutController = require('./controllers/checkout.controller');
 const cartController = require('./controllers/cart.kiran');
-const userController = require('./controllers/user.controller') ;
+
 const categoryController = require('./controllers/categories.momina')
 server.use(productController);
 server.use(cartController);
 server.use(checkoutController);
-server.use(userController) ;
+
 server.use(categoryController);
 
 
@@ -74,10 +83,12 @@ mongoose
 //shafqaat
 // Homepage route
 server.get('/', (req, res) => {
+  console.log(req.session.user) ;
   if(req.session.user)
     res.render('partials/profile') ;
   else
   res.render("partials/landing");
+  
   
 });
 

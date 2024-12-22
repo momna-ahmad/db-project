@@ -26,6 +26,7 @@ const storage = new CloudinaryStorage({
 // Use multer with Cloudinary storage
 const upload = multer({ storage: storage });
 router.get('/admin/add-product/:userId', async (req, res) => {
+  console.log(req.session.user._id) ;
   const userId = req.params.userId; // Get the userId from the route parameter
   const user = await User.findById(userId);
     res.render('admin/addProduct', {

@@ -5,18 +5,11 @@ let User = require("../models/user.model");
 
 
 const bcrypt = require('bcryptjs');
-const session = require('express-session');
-const cookieParser = require("cookie-parser"); 
+
 const ProductModel = require("../models/product.model");
 
 
-router.use(cookieParser());
-router.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
-    }));
+
 
 router.get('/login', (req,res)=>{
     return res.render('partials/loginform' , {layout : 'profileForm'}) ;
@@ -38,6 +31,7 @@ router.post('/login' , async(req,res)=>{
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
+        console.log('redirecting back to login');
           return res.redirect("/login");  // Redirect back to login page on incorrect password
       }
 
@@ -47,7 +41,7 @@ router.post('/login' , async(req,res)=>{
       // Ensure the role is properly checked and set
     
       req.session.user = user;
-      console.log(user) ;
+      console.log('session' +req.session.user) ;
     
      return res.redirect("/?btn=partials/logout-tag");  // Regular user redirected to homepage
 
@@ -96,7 +90,7 @@ router.get('/register', (req, res) => {
   // the user which has logged in is shown thier personal profile with registered products
 router.get('/readProfile', async (req, res) => {
     try {
-        console.log(req.session.user) ;
+     
         let user = new User(req.session.user) ;
         let products = await User.findById(req.session.user._id).populate('product') ;
       
