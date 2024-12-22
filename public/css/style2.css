@@ -109,3 +109,9 @@ body {
 .sold {
     background-color: #dc3545;
 }
+.product-card img {
+    width: 100%; /* Ensures the image spans the full width of its container */
+    height: 200px; /* Sets a fixed height for all images */
+    object-fit: cover; /* Ensures images maintain aspect ratio and fill the set dimensions */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+}
