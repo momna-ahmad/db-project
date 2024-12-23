@@ -186,14 +186,14 @@ router.get('/search', async (req, res) => {
 
     // Handle cases with no products
     if (products.length === 0) {
-      return res.render('partials/productList', { products: [], layout: 'basiclayout' , category: searchQuery , message: 'No products found.' ,page,
+      return res.render('partials/searchproducts', { products: [], layout: 'basiclayout' , category: searchQuery , message: 'No products found.' ,page,
         pageSize,
         totalPages,
         totalRecords,});
     }
 
     // Render search products page
-    res.render('partials/productList', { products,category: searchQuery , layout: 'basiclayout' , message: null,page,
+    res.render('partials/searchproducts', { products,category: searchQuery , layout: 'basiclayout' , message: null,page,
       pageSize,
       totalPages,
       totalRecords, });

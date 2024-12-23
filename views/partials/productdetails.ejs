@@ -13,9 +13,19 @@
                 <%= product.isAvailable ? 'In Stock' : 'Out of Stock' %>
             </p>
             
+            
             <button class="btn btn-primary <% if (!product.isAvailable) { %> disabled <% } %>">
                 Add to Cart
             </button>
+
+             <!-- Seller Info Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Seller Information</h3>
+            <p><strong>Name:</strong> <%= product.seller.name %></p>
+            <p><strong>Username:</strong> <%= product.seller.username %></p>
+        </div>
+    </div>
         </div>
 
         <!-- Right Side: Product Image -->

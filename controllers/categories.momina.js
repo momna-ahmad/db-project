@@ -50,9 +50,12 @@ let products = await Product.find({category : Category}).sort(sortOrder)
 //display details of a product
 
 router.get('/details/:id' , async(req,res)=>{
-  let product = await Product.findById(req.params.id);
+  
+  let product = await Product.findById(req.params.id).populate('seller')  // Populate the sellerId field with seller details from the User model
+  console.log(product) ;
+
   return res.render('partials/productdetails' , { layout : 'basiclayout' , product}) ; 
-})
+});
 
 
 module.exports= router ;

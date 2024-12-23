@@ -4,16 +4,24 @@
 <nav aria-label="Page navigation example">
   <ul class="pagination">
     <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
-      <a class="page-link" href="/products/<%= Category %>/<%= sort %>/<%= Number(page) - 1 %>">Previous</a>
+      <a class="page-link" href="/products/<%= Category %>/<%= sort ? sort : '' %>/<%= Number(page) - 1 %>">Previous</a>
     </li>
+    
     <% for (let index = 1; index <= totalPages; index++) { %>
-    <li class="page-item <%= page == index ? 'active' : '' %>">
-      <a class="page-link" href="/products/<%= Category %>/<%= sort %>/<%= index %>"><%= index %></a>
-    </li>
+      <li class="page-item <%= page == index ? 'active' : '' %>">
+        <% if (!sort) { %>
+          <a class="page-link" href="/products/<%= Category %>/<%= index %>"><%= index %></a>
+        <% } else { %>
+          <a class="page-link" href="/products/<%= Category %>/<%= sort %>/<%= index %>"><%= index %></a>
+        <% } %>
+      </li>
     <% } %>
+    
     <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
-      <a class="page-link" href="/products/<%= Category %>/<%= sort %>/<%= Number(page) + 1 %>">Next</a>
+      <a class="page-link" href="/products/<%= Category %>/<%= sort ? sort : '' %>/<%= Number(page) + 1 %>">Next</a>
     </li>
+    
+    
   </ul>
 </nav>
 
