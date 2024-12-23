@@ -6,12 +6,14 @@
                 <!-- Product Name -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Product Name</label>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter product name" value="<%= product.name %>" required>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter product name"
+                        value="<%= product.name %>" required>
                 </div>
                 <!-- Price -->
                 <div class="mb-3">
                     <label for="price" class="form-label">Price</label>
-                    <input type="number" id="price" name="price" class="form-control" placeholder="Enter price" value="<%= product.price %>" required>
+                    <input type="number" id="price" name="price" class="form-control" placeholder="Enter price"
+                        value="<%= product.price %>" required>
                 </div>
                 <!-- Current Product Image -->
                 <% if (product.picture) { %>
@@ -19,38 +21,46 @@
                         <label class="form-label">Current Image:</label>
                         <img src="<%= product.image %>" alt="Product Image" width="100" />
                     </div>
-                <% } %>
-                <!-- Product Images -->
-                <div class="mb-4">
-                    <label for="image" class="form-label">Image</label>
-                    <input type="file" id="image" name="image" class="form-control" accept="image/*">
-                </div>
-                <!-- Description -->
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"><%= product.description %></textarea>
-                </div>
-                <!-- Availability -->
-                <div class="mb-3">
-                    <label for="isAvailable" class="form-label">Is Available</label>
-                    <select class="form-control" id="isAvailable" name="isAvailable">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </div>
-                <!-- Category -->
-                <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <select id="category" name="category" class="form-control" required>
-                        <option value="">Select a category</option>
-                        <option value="men" >Men Clothing</option>
-                        <option value="women" >Women Clothing</option>
-                        <option value="accessories" >Accessories</option>
-                        <option value="footwear" >Footwear</option>
-                        <option value="vintage" >Vintage Pieces</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Update Product</button>
+                    <% } %>
+                        <!-- Product Images -->
+                        <div class="mb-4">
+                            <label for="image" class="form-label">Image</label>
+                            <input type="file" id="image" name="image" class="form-control" accept="image/*">
+                        </div>
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description"
+                                rows="3"><%= product.description %></textarea>
+                        </div>
+                        <!-- Availability -->
+                        <div class="mb-3">
+                            <label for="isAvailable" class="form-label">Is Available</label>
+                            <select class="form-control" id="isAvailable" name="isAvailable">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <!-- Category -->
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select id="category" name="category" class="form-control" required>
+                                <option value="">Select a category</option>
+                                <option value="men" <%=product.category==='men' ? 'selected' : '' %>>Men Clothing
+                                </option>
+                                <option value="women" <%=product.category==='women' ? 'selected' : '' %>>Women Clothing
+                                </option>
+                                <option value="accessories" <%=product.category==='accessories' ? 'selected' : '' %>
+                                    >Accessories</option>
+                                <option value="footwear" <%=product.category==='footwear' ? 'selected' : '' %>>Footwear
+                                </option>
+                                <option value="vintage" <%=product.category==='vintage' ? 'selected' : '' %>>Vintage
+                                    Pieces</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Update Product</button>
             </form>
         </div>
     </div>

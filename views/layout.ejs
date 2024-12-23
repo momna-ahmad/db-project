@@ -89,6 +89,39 @@
         </div>
     </div>
 
+    
+    <div class="container mt-4">
+        <div class="price-btn-container d-flex justify-content-between">
+            <!-- Button for Under $10 -->
+            <div class="btn-container">
+                <a href="/products/under-10" class="price-btn">Under $10</a>
+                
+            </div>
+            
+            <!-- Button for Under $50 -->
+            <div class="btn-container">
+                <a href="/products/under-50" class="price-btn">Under $50</a>
+                
+            </div>
+            
+            <!-- Button for Under $100 -->
+            <div class="btn-container">
+                <a href="/products/under-100" class="price-btn">Under $100</a>
+                
+            </div>
+            
+            <!-- Custom Price Input Form -->
+            <div class="btn-container">
+                <form id="customPriceForm" class="custom-price d-flex justify-content-between" method="get" action="/products/under">
+                    <input type="number" id="customPrice" name="price" placeholder="Enter price" min="0" required>
+                    <button type="submit" class="price-btn">Filter</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    
+
     <!-- Footer -->
     <footer class="footer text-center py-3 bg-dark">
         <p>© 2024 Vintage Thrift | Designed with class and care</p>
