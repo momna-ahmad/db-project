@@ -1,0 +1,14 @@
+
+.product-card {
+    background-size: cover;
+    background-position: center;
+    height: 250px;
+    display: flex;
+    align-items: flex-end;
+    color: white;
+  }
+  .product-info {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    width: 100%;
+    padding: 10px;
+  }

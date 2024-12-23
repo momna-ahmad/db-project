@@ -26,15 +26,18 @@
         Add to Cart
       </a>
 
-      <!-- Seller Info Section -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <h3>Seller Information</h3>
-          <p><strong>Name:</strong> <%= product.seller.name %></p>
-          <p><strong>Username:</strong> <%= product.seller.username %></p>
+            <!-- Seller Info Section -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h3>Seller Information</h3>
+                    <p><strong>Name:</strong> <%= product.seller.name %></p>
+                    <p><strong>Username:</strong> <%= product.seller.username %></p>
+                    <a href="/sellerdetails/<%= product.seller._id %>"><button class = "btn btn-primary">
+                        More by seller
+                    </button></a>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
     <!-- Right Side: Product Image -->
     <div

@@ -2,7 +2,7 @@ const express = require("express");
 let router = express.Router();
 
 let Product = require("../models/product.model");
-let user = require("../models/user.model");
+let User = require("../models/user.model");
 let order = require("../models/order.model");
 
 router.get("/products/:category/:sort?/:page?", async (req, res) => {
@@ -69,6 +69,21 @@ router.get("/details/:id", async (req, res) => {
     product,
   });
 });
+
+router.get("/sellerdetails/:id" , async(req,res)=>{
+  let seller = await User.findById(req.params.id) ;
+  let products = await Product.find({ seller: req.params.id });
+
+  console.log(seller) ;
+  console.log(products) ;
+  return res.render("partials/showseller" , {
+    seller,
+    products,
+    layout: "basiclayout" ,
+    stylesheet : "/css/sellerinfo" 
+  })
+});
+
 
 //filtering products route
 
