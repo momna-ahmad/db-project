@@ -108,4 +108,3 @@ router.get('/readProfile', async (req, res) => {
   
 
 module.exports = router ;
-

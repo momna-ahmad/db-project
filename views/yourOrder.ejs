@@ -1,0 +1,44 @@
+<div class="container mt-5">
+    <h1 class="text-center">Your Orders</h1>
+    <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } else if (orders.length === 0) { %>
+        <p class="text-center">You have not placed any orders yet.</p>
+    <% } else { %>
+        <table class="table table-striped mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Order Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach((order, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= order.product.name %></td>
+                        <td>$<%= order.product.price %></td>
+                        <td><%= order.product.category %></td>
+                        <td><%= new Date(order.dateOrdered).toLocaleString() %></td>
+                        <td>
+                            <span   style="color: rgb(25, 25, 25);" class="badge 
+                                <%= order.status === 'pending' ? 'badge-warning' : 
+                                    order.status === 'shipped' ? 'badge-primary' : 
+                                    order.status === 'delivered' ? 'badge-success' : 
+                                    order.status === 'cancelled' ? 'badge-danger' : '' %>">
+                                <%= order.status %>
+                            </span>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+  </div>
+  
