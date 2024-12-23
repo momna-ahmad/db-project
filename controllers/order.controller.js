@@ -31,22 +31,23 @@ router.get("/your-order", async (req, res) => {
 router.get("/shop-order", async (req, res) => {
     try {
         const userId = req.session.user._id;
+        console.log("Logged-in user ID:", userId);
 
-        // Fetch products owned by the logged-in user
         const userProducts = await Product.find({ seller: userId }).select("_id").lean();
+        console.log("User products:", userProducts);
 
-        // Extract product IDs for matching
         const productIds = userProducts.map(product => product._id);
+        console.log("Product IDs:", productIds);
 
-        // Fetch orders containing the user's products
         const shopOrders = await Order.find({ product: { $in: productIds } })
             .populate("product", "name price category")
             .populate("buyer", "username email")
             .lean();
+        console.log("Shop orders:", shopOrders);
 
         res.render("shopOrder", {
             orders: shopOrders,
-            layout:"basiclayout",
+            layout: "basiclayout",
             error: null,
         });
     } catch (error) {
@@ -73,7 +74,7 @@ router.post("/admin/update-order-status", async (req, res) => {
       await Order.findByIdAndUpdate(orderId, { status }, { new: true });
 
       // Redirect back to the shop orders page
-      res.redirect("/shopOrder");
+      res.redirect("/shop-order");
       
   } catch (error) {
       console.error("Error updating order status:", error);

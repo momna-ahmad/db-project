@@ -23,7 +23,7 @@
                   <tr>
                       <td><%= index + 1 %></td>
                       <td><%= order.product.name %></td>
-                      <td>$<%= order.product.price %></td>
+                      <td>PKR:<%= order.product.price %></td>
                       <td><%= order.product.category %></td>
                       <td><%= order.buyer.username %> (<%= order.buyer.email %>)</td>
                       <td><%= new Date(order.dateOrdered).toLocaleString() %></td>
