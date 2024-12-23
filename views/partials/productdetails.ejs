@@ -2,31 +2,36 @@
     <div class="row product-detail">
         <!-- Left Side: Product Info -->
         <div class="col-md-6 product-info">
-            <h1 class="product-name mb-4"><%= product.name %></h1>
-            <p class="product-price h4 text-primary mb-3">$<%= product.price.toFixed(2) %></p>
-            <p class="product-description mb-3"><%= product.description %></p>
-            
+            <h1 class="product-name mb-4">
+                <%= product.name %>
+            </h1>
+            <p class="product-price h4 text-primary mb-3">$<%= product.price.toFixed(2) %>
+            </p>
+            <p class="product-description mb-3">
+                <%= product.description %>
+            </p>
+
             <!-- Product Category -->
-            <p class="product-category mb-3"><strong>Category:</strong> <%= product.category %></p>
+            <p class="product-category mb-3"><strong>Category:</strong>
+                <%= product.category %>
+            </p>
 
             <p class="availability <%= product.isAvailable ? 'text-success' : 'text-danger' %>">
                 <%= product.isAvailable ? 'In Stock' : 'Out of Stock' %>
             </p>
-            
-            <button class="btn btn-primary <% if (!product.isAvailable) { %> disabled <% } %>">
+
+            <a href="/add-to-cart/<%= product._id %>"
+                class="btn btn-primary <% if (!product.isAvailable) { %> disabled <% } %>">
                 Add to Cart
-            </button>
+            </a>
         </div>
 
         <!-- Right Side: Product Image -->
         <div class="col-md-6 product-image-container">
-            <img 
-                src="<%= product.picture.imgUrl %>" 
-                alt="<%= product.name %>" 
-                class="img-fluid rounded shadow-sm" 
+            <img src="<%= product.picture.imgUrl %>" alt="<%= product.name %>" class="img-fluid rounded shadow-sm"
                 style="width: 500px; height: 400px; object-fit: cover;">
         </div>
-        
+
     </div>
 
     <!-- Bootstrap JS -->
