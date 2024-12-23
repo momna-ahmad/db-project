@@ -58,4 +58,8 @@ router.get('/details/:id' , async(req,res)=>{
 });
 
 
+
+
+//filtering products route
+
 module.exports= router ;
