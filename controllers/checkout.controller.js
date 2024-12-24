@@ -89,4 +89,90 @@ console.log(item) ;
     }
 });
 
+//hira filtering products 
+// Route for filtering products by price
+router.get('/products/under/:filter', async (req, res) => {
+  try {
+    let maxPrice;
+
+    // Determine the max price based on the filter parameter
+    switch (req.params.filter) {
+      case '10':
+        maxPrice = 10;
+        break;
+      case '50':
+        maxPrice = 50;
+        break;
+      case '100':
+        maxPrice = 100;
+        break;
+      default:
+        return res.status(404).send('Invalid filter.');
+    }
+
+    // Fetch products with price less than or equal to the max price
+    const products = await Product.find({ price: { $lte: maxPrice } });
+
+    // Pagination logic (optional)
+    let page = req.query.page ? Number(req.query.page) : 1;
+    let pageSize = 6; // Number of products per page
+    let totalRecords = products.length;
+    let totalPages = Math.ceil(totalRecords / pageSize);
+
+    // Paginate products
+    const paginatedProducts = products.slice((page - 1) * pageSize, page * pageSize);
+
+    // Render the filtered products on the page
+    res.render('partials/searchproducts', {
+      products: paginatedProducts,
+      layout: 'basiclayout', // Assuming layout is applied
+      maxPrice,
+      page,
+      pageSize,
+      totalPages,
+      totalRecords,
+      message: products.length ? null : 'No products found in this price range.',
+    });
+  } catch (error) {
+    console.error('Error filtering products:', error);
+    res.status(500).send('An error occurred while filtering products.');
+  }
+});
+
+// Route for custom price filter
+router.get('/products/custom', async (req, res) => {
+  try {
+    const maxPrice = parseInt(req.query.price, 10);
+
+    if (isNaN(maxPrice) || maxPrice < 0) {
+      return res.status(400).send('Invalid price input.');
+    }
+
+    const products = await Product.find({ price: { $lte: maxPrice } });
+    // Pagination logic (optional)
+    let page = req.query.page ? Number(req.query.page) : 1;
+    let pageSize = 6; // Number of products per page
+    let totalRecords = products.length;
+    let totalPages = Math.ceil(totalRecords / pageSize);
+
+    // Paginate products
+    const paginatedProducts = products.slice((page - 1) * pageSize, page * pageSize);
+
+    // Render the filtered products on the page
+    res.render('partials/searchproducts', {
+      products: paginatedProducts,
+      layout: 'basiclayout',
+      maxPrice,
+      page,
+      pageSize,
+      totalPages,
+      totalRecords,
+      message: products.length ? null : 'No products found in this price range.',
+    });
+  } catch (error) {
+    console.error('Error with custom price filter:', error);
+    res.status(500).send('An error occurred while filtering products.');
+  }
+});
+
 module.exports = router;

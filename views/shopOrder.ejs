@@ -1,0 +1,54 @@
+<div class="container mt-5">
+    <h1 class="text-center">Shop Orders</h1>
+    <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } else if (orders.length === 0) { %>
+        <p class="text-center">No one has placed orders on your products yet.</p>
+    <% } else { %>
+        <table class="table table-striped mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Buyer</th>
+                    <th>Order Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach((order, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= order.product.name %></td>
+                        <td>$<%= order.product.price %></td>
+                        <td><%= order.product.category %></td>
+                        <td><%= order.buyer.username %> (<%= order.buyer.email %>)</td>
+                        <td><%= new Date(order.dateOrdered).toLocaleString() %></td>
+                        
+  
+                        <td>
+                          <form action="/admin/update-order-status" method="POST">
+                              <input type="hidden" name="orderId" value="<%= order._id %>">
+                              <select name="status" class="form-control">
+                                  <option value="pending" <%= order.status === "pending" ? "selected" : "" %>>Pending</option>
+                                  <option value="shipped" <%= order.status === "shipped" ? "selected" : "" %>>Shipped</option>
+                                  <option value="delivered" <%= order.status === "delivered" ? "selected" : "" %>>Delivered</option>
+                                  <option value="cancelled" <%= order.status === "cancelled" ? "selected" : "" %>>Cancelled</option>
+                              </select>
+                      </td>
+                      <td>
+                          <button type="submit" class="btn btn-dark btn-sm">Update</button>
+                          </form>
+                      </td>
+  
+  
+  
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+  </div>

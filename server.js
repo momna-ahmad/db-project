@@ -30,6 +30,7 @@ server.use(session({
 
 const userController = require('./controllers/user.controller') ;
 server.use(userController) ;
+const orderController = require('./controllers/order.controller');
 const productController = require('./controllers/product.kiran');
 const checkoutController = require('./controllers/checkout.controller');
 const cartController = require('./controllers/cart.kiran');
@@ -38,8 +39,9 @@ const categoryController = require('./controllers/categories.momina')
 server.use(productController);
 server.use(cartController);
 server.use(checkoutController);
-
+server.use(orderController);
 server.use(categoryController);
+
 
 
 let Product = require("./models/product.model");
