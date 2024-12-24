@@ -60,6 +60,64 @@ router.get("/products/:category/:sort?/:page?", async (req, res) => {
     return res.status(500).send("An error occurred while fetching products.");
   }
 });
+//kiran 
+router.get("/product/price/:priceRange/:page?", async (req, res) => {
+  try {
+    // Extract price range and pagination info
+    const priceRange = req.params.priceRange;
+    const page = req.params.page ? Number(req.params.page) : 1;
+    const pageSize = 6;
+
+    // Define price filter
+    let priceFilter = {};
+    if (priceRange === "under-3000") {
+      // Show products with prices less than 3000
+      priceFilter = { price: { $lt: 3000 } };
+    } else if (priceRange === "under-5000") {
+      // Show products with prices greater than or equal to 3000 but less than 5000
+      priceFilter = { price: { $gte: 3000, $lt: 5000 } };
+    } else if (priceRange === "under-7000") {
+      // Show products with prices greater than or equal to 5000 but less than 7000
+      priceFilter = { price: { $gte: 5000, $lt: 7000 } };
+    } else {
+      return res.status(400).send("Invalid price range.");
+    }
+    
+
+    // Combine filters
+    const filter = { isAvailable: true, ...priceFilter };
+
+    // Fetch total records and calculate total pages
+    const totalRecords = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalRecords / pageSize);
+
+    // Fetch filtered products
+    const products = await Product.find(filter)
+      .limit(pageSize)
+      .skip((page - 1) * pageSize);
+
+    // Check if products are found
+    if (products.length > 0) {
+      return res.render("under-price", {
+        products,
+        layout: "basiclayout",
+        priceRange,
+        page,
+        pageSize,
+        totalPages,
+        totalRecords,
+      });
+    } else {
+      return res.render("./partials/noproductsfound", {
+        message: "No products found in this price range.",
+        layout: "basiclayout",
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return res.status(500).send("An error occurred while fetching products.");
+  }
+});
 
 //display details of a product
 
