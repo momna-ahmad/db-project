@@ -141,29 +141,48 @@ router.get('/products/under/:filter', async (req, res) => {
 });
 
 // Route for custom price filter
-router.get('/products/custom', async (req, res) => {
+router.get('/products/custom/:page?', async (req, res) => {
   try {
-    const maxPrice = parseInt(req.query.price, 10);
+    const range = req.query.price ? parseFloat(req.query.price) : null;
+    // Pagination logic
+    let page = req.query.page ? Number(req.query.page) : 1;  // Default to page 1 if not provided
+    const pageSize = 6;  // Number of products per page
+    
+   
+  
+  
+    // Fetch the products based on the query with pagination
+    // Fetch price from req.params (max price)
+  
 
-    if (isNaN(maxPrice) || maxPrice < 0) {
-      return res.status(400).send('Invalid price input.');
+  // Fetch all products from the database (you may add other filtering like isAvailable as needed)
+  let products = await Product.find({ isAvailable: true });
+
+  // Initialize an array to hold filtered products
+  let filteredProducts = [];
+
+  // Check if price is provided in req.params
+  
+    // Iterate through products to filter based on price
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].price <= range) {
+        // Add products with price below or equal to req.params.price to the filteredProducts array
+        filteredProducts.push(products[i]);
+      }
     }
+  console.log(filteredProducts);
 
-    const products = await Product.find({ price: { $lte: maxPrice } });
-    // Pagination logic (optional)
-    let page = req.query.page ? Number(req.query.page) : 1;
-    let pageSize = 6; // Number of products per page
-    let totalRecords = products.length;
-    let totalPages = Math.ceil(totalRecords / pageSize);
-
-    // Paginate products
-    const paginatedProducts = products.slice((page - 1) * pageSize, page * pageSize);
-
+  
+    // Fetch the total number of products matching the query (for pagination)
+    const totalRecords = products.length ;
+  
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalRecords / pageSize);
+    
     // Render the filtered products on the page
-    res.render('partials/searchproducts', {
-      products: paginatedProducts,
+    res.render('partials/filterbyprice', {
+      filteredProducts,
       layout: 'basiclayout',
-      maxPrice,
       page,
       pageSize,
       totalPages,
@@ -171,9 +190,10 @@ router.get('/products/custom', async (req, res) => {
       message: products.length ? null : 'No products found in this price range.',
     });
   } catch (error) {
-    console.error('Error with custom price filter:', error);
-    res.status(500).send('An error occurred while filtering products.');
+    console.error(error);
+    res.status(500).send('Server error');
   }
+  
 });
 
 module.exports = router;

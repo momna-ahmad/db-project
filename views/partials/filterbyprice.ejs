@@ -1,0 +1,23 @@
+
+<!-- Product List Section -->
+<div class="container mt-5" style="background-color: rgb(0, 0, 0); border-radius: 20px; padding: 20px;">
+    <div class="row mt-4">
+        <% filteredProducts.forEach(function(product) { %>
+            <% if (product.isAvailable) { %>
+                <div class="col-md-4 col-sm-6 col-12 mb-4" style="padding: 10px;">
+                    <!-- Wrap the entire product card with an anchor tag for the product details route -->
+                    <a href="/details/<%= product._id %>" class="text-decoration-none" style="color: inherit;">
+                        <div class="card" style="border-radius: 20px; border: 5px solid rgb(255, 255, 255); background-color: #333;">
+                            <img src="<%= product.picture.imgUrl %>" alt="<%= product.name %>" class="card-img-top" style="height: 250px; object-fit: cover; border-radius: 20px;">
+                            <div class="card-body" style="text-align: center; color: white;">
+                                <h5 class="card-title" style="font-weight: bold; font-size: 1.5rem;"><%= product.name %></h5>
+                                <p class="card-text" style="font-size: 1rem;">PKR: <%= product.price %></p>
+                                <a href="/add-to-cart/<%= product._id %>" class="btn btn-primary" style="background-color: black; color: white; padding: 8px 20px; border-radius: 6px; width: 120px;">Add to Cart</a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% } %>
+        <% }); %>
+    </div>
+</div>

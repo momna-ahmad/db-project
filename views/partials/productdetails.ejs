@@ -44,17 +44,18 @@
       class="col-md-6 product-image-container"
       style="display: flex; justify-content: center; align-items: center"
     >
-      <img
-        src="<%= product.picture.imgUrl %>"
-        alt="<%= product.name %>"
-        class="img-fluid rounded"
-        style="
-          width: 500px;
-          height: 400px;
-          object-fit: cover;
-          border-radius: 10px;
-        "
-      />
+    <img
+    src="<%= product.picture.imgUrl %>"
+    alt="<%= product.name %>"
+    class="img-fluid rounded"
+    style="
+      max-width: 100%;  /* Ensures the image is responsive */
+      height: auto;     /* Maintains the aspect ratio */
+      object-fit: contain; /* Ensures the entire image is visible */
+      border-radius: 10px;
+    "
+  />
+  
     </div>
   </div>
 

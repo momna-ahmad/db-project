@@ -49,7 +49,7 @@
           <img src="<%= product.picture.imgUrl %>" alt="<%= product.name %>" class="card-img-top" style="height: 250px; object-fit: cover;">
           <div class="card-body">
             <h5 class="card-title"><%= product.name %></h5>
-            <p class="card-text">$<%= product.price.toFixed(2) %></p>
+            <p class="card-text">PKR : <%= product.price.toFixed(2) %></p>
             <a href="/add-to-cart/<%= product._id %>" class="btn btn-primary">
               Add to Cart
             </a>
