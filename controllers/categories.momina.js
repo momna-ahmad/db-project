@@ -23,13 +23,16 @@ router.get("/products/:category/:sort?/:page?", async (req, res) => {
     let page = req.params.page;
     page = page ? Number(page) : 1;
     let pageSize = 6;
-    const totalRecords = await Product.countDocuments({ category: Category });
+    const totalRecords = await Product.countDocuments({ category: Category , isAvailable : true});
     let totalPages = Math.ceil(totalRecords / pageSize);
+    console.log('pages' + totalPages) ;
     // return res.send({ page });
-    let products = await Product.find({ category: Category })
+    let products = await Product.find({ category: Category , isAvailable : true })
       .sort(sortOrder)
       .limit(pageSize)
       .skip((page - 1) * pageSize);
+
+      console.log(products) ;
     
     // Check if products were found
     if (products.length > 0) {

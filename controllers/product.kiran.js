@@ -168,12 +168,18 @@ router.get('/search', async (req, res) => {
   try {
     // Perform case-insensitive search on name, category, and description
     const products = await Product.find({
-      $or: [
-        { name: { $regex: searchQuery, $options: 'i' } },
-        { category: { $regex: searchQuery, $options: 'i' } },
-        { description: { $regex: searchQuery, $options: 'i' } }
+      $and: [
+        {
+          $or: [
+            { name: { $regex: searchQuery, $options: 'i' } },
+            { category: { $regex: searchQuery, $options: 'i' } },
+            { description: { $regex: searchQuery, $options: 'i' } },
+          ]
+        },
+        { isAvailable: true }
       ]
     });
+    
    
     let page = req.params.page;
     page = page ? Number(page) : 1;

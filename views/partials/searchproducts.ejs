@@ -15,12 +15,12 @@
     <!-- Product List -->
     <div class="row mt-4">
       <% products.forEach(function(product) { %>
-        <% if(product.isAvailable) { %>}
+        <% if(product.isAvailable) { %>
       <div class="col-md-4 col-sm-6 col-12 mb-4">
         <!-- Wrap the entire product card with an anchor tag for the product details route -->
         <a href="/details/<%= product._id %>" class="text-decoration-none">
           <div class="card">
-            <img src="/<%= product.picture.imgUrl %>" alt="<%= product.name %>" class="card-img-top" style="height: 250px; object-fit: cover;">
+            <img src="<%= product.picture.imgUrl %>" alt="<%= product.name %>" class="card-img-top" style="height: 250px; object-fit: cover;">
             <div class="card-body">
               <h5 class="card-title"><%= product.name %></h5>
               <p class="card-text">$<%= product.price.toFixed(2) %></p>
