@@ -1,0 +1,46 @@
+<div>
+    Page <%= page %> of <%= totalPages %>
+  </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
+        <a class="page-link" href="/product/price/<%= priceRange %>/<%= Number(page) - 1 %>">Previous</a>
+      </li>
+      
+      <% for (let index = 1; index <= totalPages; index++) { %>
+        <li class="page-item <%= page == index ? 'active' : '' %>">
+          <a class="page-link" href="/product/price/<%= priceRange %>/<%= index %>"><%= index %></a>
+        </li>
+      <% } %>
+      
+      <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
+        <a class="page-link" href="/product/price/<%= priceRange %>/<%= Number(page) + 1 %>">Next</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="container mt-5">
+    <!-- Product List -->
+    <div class="row mt-4">
+      <% products.forEach(function(product) { %>
+        <% if(product.isAvailable) { %>
+      <div class="col-md-4 col-sm-6 col-12 mb-4">
+        <!-- Wrap the entire product card with an anchor tag for the product details route -->
+        <a href="/details/<%= product._id %>" class="text-decoration-none">
+          <div class="card">
+            <img src="<%= product.picture.imgUrl %>" alt="<%= product.name %>" class="card-img-top" style="height: 250px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title"><%= product.name %></h5>
+              <p class="card-text">PKR:<%= product.price.toFixed(2) %></p>
+              <a href="/add-to-cart/<%= product._id %>" class="btn btn-primary">
+                Add to Cart
+              </a>
+            </div>
+          </div>
+        </a>
+      </div>
+      <% } %>
+      <% }); %>
+    </div>
+  </div>
+  
