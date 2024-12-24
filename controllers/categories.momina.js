@@ -30,7 +30,7 @@ router.get("/products/:category/:sort?/:page?", async (req, res) => {
       .sort(sortOrder)
       .limit(pageSize)
       .skip((page - 1) * pageSize);
-    console.log(products);
+    
     // Check if products were found
     if (products.length > 0) {
       // Render a page to display the products or send the products as JSON
@@ -61,8 +61,9 @@ router.get("/products/:category/:sort?/:page?", async (req, res) => {
 //display details of a product
 
 router.get("/details/:id", async (req, res) => {
+  
   let product = await Product.findById(req.params.id).populate("seller"); // Populate the sellerId field with seller details from the User model
-  console.log(product);
+  
 
   return res.render("partials/productdetails", {
     layout: "basiclayout",
@@ -73,14 +74,15 @@ router.get("/details/:id", async (req, res) => {
 router.get("/sellerdetails/:id" , async(req,res)=>{
   let seller = await User.findById(req.params.id) ;
   let products = await Product.find({ seller: req.params.id });
-
-  console.log(seller) ;
-  console.log(products) ;
+  let sold =  await Product.find({ seller: req.params.id , isAvailable : false }) ;
+  console.log(sold) ;
   return res.render("partials/showseller" , {
     seller,
     products,
     layout: "basiclayout" ,
-    stylesheet : "/css/sellerinfo" 
+    sold,
+
+    
   })
 });
 

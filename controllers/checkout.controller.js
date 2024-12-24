@@ -54,8 +54,9 @@ router.post("/checkout", async (req, res) => {
         // Create orders for each product in the cart
         
         for (const product of req.cookies.cart) {
-            let item = await Product.findById(product).select('price')
-console.log(item) ;
+            let item = await Product.findById(product) ;
+            item.isAvailable = false ;
+            item.save() ;
             // Create order object
             const order = new Order({
                 buyer,
