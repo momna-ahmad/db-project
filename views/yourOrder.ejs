@@ -27,7 +27,7 @@
                         <td><%= order.product.category %></td>
                         <td><%= new Date(order.dateOrdered).toLocaleString() %></td>
                         <td>
-                            <span class="badge 
+                            <span   style="color: rgb(25, 25, 25);" class="badge 
                                 <%= order.status === 'pending' ? 'badge-warning' : 
                                     order.status === 'shipped' ? 'badge-primary' : 
                                     order.status === 'delivered' ? 'badge-success' : 
@@ -41,3 +41,4 @@
         </table>
     <% } %>
   </div>
+  

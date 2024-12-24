@@ -34,8 +34,8 @@ const orderController = require('./controllers/order.controller');
 const productController = require('./controllers/product.kiran');
 const checkoutController = require('./controllers/checkout.controller');
 const cartController = require('./controllers/cart.kiran');
-
-const categoryController = require('./controllers/categories.momina')
+const orderController = require('./controllers/order.controller');
+const categoryController = require('./controllers/categories.momina');
 server.use(productController);
 server.use(cartController);
 server.use(checkoutController);
