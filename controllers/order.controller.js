@@ -71,8 +71,11 @@ router.post("/admin/update-order-status", async (req, res) => {
       }
 
       // Update the order's status
-      await Order.findByIdAndUpdate(orderId, { status }, { new: true });
-
+      let order = await Order.findById(orderId) ;
+      order.status = status ;
+      order.save() ;
+      //await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+console.log(order) ;
       // Redirect back to the shop orders page
       res.redirect("/shop-order");
       
